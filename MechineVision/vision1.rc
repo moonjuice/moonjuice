@@ -1,0 +1,565 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文 (台灣) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
+#pragma code_page(950)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 4, 1\r\n"
+    "#pragma code_page(950)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\vision1.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""l.cht\\afxres.rc""          // Standard components\r\n"
+    "#include ""l.cht\\afxprint.rc""        // printing/print preview resources\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\vision1.ico"
+IDR_VISIONTYPE          ICON                    "res\\vision1Doc.ico"
+IDI_ICON1               ICON                    "res\\icon1.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+IDB_BITMAP2             BITMAP                  "image1.bmp"
+IDB_BITMAP1             BITMAP                  "image2.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR  16, 15
+BEGIN
+    BUTTON      ID_FILE_NEW
+    BUTTON      ID_FILE_OPEN
+    BUTTON      ID_FILE_SAVE
+    SEPARATOR
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_FILE_PRINT
+    SEPARATOR
+    BUTTON      ID_APP_ABOUT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU 
+BEGIN
+    POPUP "檔案(&F)"
+    BEGIN
+        MENUITEM "開啟新檔(&N)\tCtrl+N",            ID_FILE_NEW
+        MENUITEM "開啟舊檔(&O)...\tCtrl+O",         ID_FILE_OPEN
+        MENUITEM "儲存檔案(&S)\tCtrl+S",            ID_FILE_SAVE
+        MENUITEM "另存新檔(&A)...",                 ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        MENUITEM "列印(&P)...\tCtrl+P",           ID_FILE_PRINT
+        MENUITEM "預覽列印(&V)",                    ID_FILE_PRINT_PREVIEW
+        MENUITEM "列印設定(&R)...",                 ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "最近開啟檔案",                      ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "結束(&X)",                      ID_APP_EXIT
+    END
+    POPUP "編輯(&E)"
+    BEGIN
+        MENUITEM "復原(&U)\tCtrl+Z",              ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "剪下(&T)\tCtrl+X",              ID_EDIT_CUT
+        MENUITEM "複製(&C)\tCtrl+C",              ID_EDIT_COPY
+        MENUITEM "貼上(&P)\tCtrl+V",              ID_EDIT_PASTE
+    END
+    POPUP "檢視(&V)"
+    BEGIN
+        MENUITEM "工具列(&T)",                     ID_VIEW_TOOLBAR
+        MENUITEM "狀態列(&S)",                     ID_VIEW_STATUS_BAR
+    END
+    POPUP "說明(&H)"
+    BEGIN
+        MENUITEM "關於 vision1(&A)...",           ID_APP_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS 
+BEGIN
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG  0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "關於 vision1"
+FONT 9, "新細明體"
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "vision1 Version 1.0",IDC_STATIC,40,10,119,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2002",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "確定",IDOK,178,7,50,14,WS_GROUP
+END
+
+IDD_VISION1_FORM DIALOGEX 0, 0, 320, 200
+STYLE DS_SETFONT | WS_CHILD
+FONT 14, "新細明體", 0, 0, 0x1
+BEGIN
+    PUSHBUTTON      "基本影像處理技術",IDC_BUTTON1,56,66,101,26,BS_CENTER | BS_VCENTER | BS_NOTIFY,WS_EX_DLGMODALFRAME | WS_EX_CLIENTEDGE
+    CONTROL         135,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN | WS_BORDER,50,7,218,51,WS_EX_TRANSPARENT
+    CONTROL         136,IDC_STATIC,"Static",SS_BITMAP,37,104,216,49,WS_EX_TRANSPARENT
+END
+
+IDD_BASE DIALOGEX 0, 0, 616, 351
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "Tahoma", 0, 0, 0x0
+BEGIN
+    PUSHBUTTON      "載入影像",IDC_LOAD_IMAGE,13,204,50,14
+    CONTROL         "",IDC_Picture1,"Static",SS_ENHMETAFILE,37,39,233,131
+    CONTROL         "",IDC_Picture2,"Static",SS_ENHMETAFILE,314,40,215,135
+    PUSHBUTTON      "儲存影像",IDC_SAVE_IMAGE,69,205,50,14
+    LTEXT           "處理前影像",IDC_STATIC,104,26,41,8
+    LTEXT           "處理後影像",IDC_STATIC,405,25,41,8
+    GROUPBOX        "影像顯示區",IDC_STATIC,10,16,574,178,BS_CENTER
+    PUSHBUTTON      "Cancel",IDCANCEL,533,286,50,14
+    DEFPUSHBUTTON   "OK",IDOK,534,265,50,14
+    COMBOBOX        IDC_COMBO2,459,313,48,43,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "遮罩選擇",IDC_STATIC,465,300,33,8
+    COMBOBOX        IDC_COMBO8,385,308,60,118,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "遮罩選擇",IDC_STATIC,397,300,33,8
+    PUSHBUTTON      "Sobel",IDC_Sobel,459,284,50,14
+    PUSHBUTTON      "線段強化",IDC_Line_Edge,387,281,50,14
+    COMBOBOX        IDC_COMBO1,459,247,48,49,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "遮罩選擇",IDC_STATIC,469,236,33,8
+    LTEXT           "遮罩選擇",IDC_STATIC,393,233,33,8
+    COMBOBOX        IDC_COMBO7,383,244,54,54,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Laplacian",IDC_Laplacian,457,212,50,14
+    PUSHBUTTON      "位移相差強化",IDC_Disp_Edge,381,212,60,14
+    GROUPBOX        "邊緣強化",IDC_STATIC,371,201,150,143,BS_CENTER
+    GROUPBOX        "濾波",IDC_STATIC,293,196,67,141,BS_CENTER
+    PUSHBUTTON      "高通濾波",IDC_HightPass,299,212,50,14
+    LTEXT           "遮罩選擇",IDC_STATIC,309,228,33,8
+    COMBOBOX        IDC_COMBO3,303,241,48,54,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "遮罩選擇",IDC_STATIC,307,300,33,8
+    PUSHBUTTON      "低通濾波",IDC_LowPass,299,281,50,14
+    COMBOBOX        IDC_COMBO4,303,313,48,66,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "影像對比強化",IDC_Contrast,217,313,65,14
+    EDITTEXT        IDC_H_STR_Value,245,289,32,14,ES_AUTOHSCROLL
+    LTEXT           "擴張值",IDC_STATIC,217,292,25,8
+    PUSHBUTTON      "濃度分佈擴張",IDC_HISTOGRAM_Stretch,219,271,63,14
+    EDITTEXT        IDC_H_S_Value,251,247,30,14,ES_AUTOHSCROLL
+    LTEXT           " 滑動值",IDC_STATIC,221,249,27,8
+    PUSHBUTTON      "濃度分佈滑動",IDC_HISTOGRAM_Sliding,221,228,61,14
+    GROUPBOX        "濃度",IDC_STATIC,207,201,80,132,BS_CENTER
+    PUSHBUTTON      "濃度分佈分析",IDC_HISTOGRAM,217,209,61,14
+    LTEXT           "可Uodo次數",IDC_STATIC,165,194,42,8
+    PUSHBUTTON      "UoDo",IDC_RETURN,127,206,50,14
+    EDITTEXT        IDC_Return_num,181,207,17,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_DEL_Pixel,25,309,66,14,ES_AUTOHSCROLL
+    LTEXT           "濾除pixel數",IDC_STATIC,39,298,40,8
+    PUSHBUTTON      "黑白對換",IDC_BW_Change,105,306,72,14
+    PUSHBUTTON      "影像平滑化",IDC_Image_Smoth,105,282,72,14
+    PUSHBUTTON      "濾雜訊",IDC_Delete_Noise,23,279,70,15
+    CONTROL         "Slider1",IDC_SLIDER1,"msctls_trackbar32",TBS_AUTOTICKS | TBS_TOP | WS_TABSTOP,17,258,150,11
+    PUSHBUTTON      "執行二值化",IDC_Two_Value,107,241,67,14
+    EDITTEXT        IDC_Threshlod,21,242,68,14,ES_AUTOHSCROLL
+    LTEXT           "二值化門檻值",IDC_STATIC,29,230,49,8
+    GROUPBOX        "二值化",IDC_STATIC,11,222,192,109,BS_CENTER
+END
+
+IDD_MASk DIALOG  0, 0, 227, 157
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 10, "System"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,116,136,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,170,136,50,14
+    EDITTEXT        IDC_EDIT1,35,29,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT2,90,29,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT3,140,29,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT4,35,62,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT5,90,62,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT6,140,62,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT7,35,93,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT8,90,93,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT9,140,93,40,14,ES_AUTOHSCROLL
+    LTEXT           "(i-1,j-1)",IDC_STATIC,38,20,23,8
+    LTEXT           "(i,j-1)",IDC_STATIC,92,19,17,8
+    LTEXT           "(i+1,j-1)",IDC_STATIC,147,21,25,8
+    LTEXT           "(i-1,j)",IDC_STATIC,43,52,17,8
+    LTEXT           "(i,j)",IDC_STATIC,95,54,11,8
+    LTEXT           "(i+1,j)",IDC_STATIC,145,54,19,8
+    LTEXT           "(i-1,j+1)",IDC_STATIC,44,83,25,8
+    LTEXT           "(i,j+1)",IDC_STATIC,96,85,19,8
+    LTEXT           "(i+1,j+1)",IDC_STATIC,148,85,27,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040404b0"
+        BEGIN
+            VALUE "FileDescription", "vision1 MFC Application"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "vision1"
+            VALUE "LegalCopyright", "Copyright (C) 2002"
+            VALUE "OriginalFilename", "vision1.EXE"
+            VALUE "ProductName", "vision1 Application"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x404, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_VISION1_FORM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 313
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 193
+    END
+
+    IDD_BASE, DIALOG
+    BEGIN
+        RIGHTMARGIN, 603
+        BOTTOMMARGIN, 343
+    END
+
+    IDD_MASk, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 220
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 150
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_BASE DLGINIT
+BEGIN
+    IDC_COMBO2, 0x403, 7, 0
+0x614d, 0x6b73, 0x785f, "\000" 
+    IDC_COMBO2, 0x403, 7, 0
+0x614d, 0x6b73, 0x795f, "\000" 
+    IDC_COMBO2, 0x403, 8, 0
+0x614d, 0x6b73, 0x785f, 0x0079, 
+    IDC_COMBO8, 0x403, 9, 0
+0xabab, 0xbdaa, 0x75bd, 0x71ac, "\000" 
+    IDC_COMBO8, 0x403, 9, 0
+0xf4a4, 0xada5, 0x75bd, 0x71ac, "\000" 
+    IDC_COMBO8, 0x403, 11, 0
+0xaaa5, 0xeca8, 0x6ba5, 0xefb9, 0xa4a8, "\000" 
+    IDC_COMBO8, 0x403, 11, 0
+0x6ba5, 0xeca8, 0xaaa5, 0xefb9, 0xa4a8, "\000" 
+    IDC_COMBO8, 0x403, 5, 0
+0xdba6, 0x71ad, "\000" 
+    IDC_COMBO1, 0x403, 6, 0
+0x614d, 0x6b73, 0x0031, 
+    IDC_COMBO1, 0x403, 6, 0
+0x614d, 0x6b73, 0x0032, 
+    IDC_COMBO1, 0x403, 6, 0
+0x614d, 0x6b73, 0x0033, 
+    IDC_COMBO1, 0x403, 10, 0
+0x4553, 0x5f54, 0x4156, 0x554c, 0x0045, 
+    IDC_COMBO7, 0x403, 8, 0
+0x614d, 0x6b73, 0x5628, 0x0029, 
+    IDC_COMBO7, 0x403, 8, 0
+0x614d, 0x6b73, 0x4828, 0x0029, 
+    IDC_COMBO7, 0x403, 10, 0
+0x614d, 0x6b73, 0x4828, 0x5626, 0x0029, 
+    IDC_COMBO7, 0x403, 13, 0
+0x614d, 0x6b73, 0x2820, 0xa620, 0xaddb, 0x2971, "\000" 
+    IDC_COMBO3, 0x403, 6, 0
+0x614d, 0x6b73, 0x0031, 
+    IDC_COMBO3, 0x403, 6, 0
+0x614d, 0x6b73, 0x0032, 
+    IDC_COMBO3, 0x403, 6, 0
+0x614d, 0x6b73, 0x0033, 
+    IDC_COMBO3, 0x403, 9, 0
+0x614d, 0x6b73, 0xdba6, 0x71ad, "\000" 
+    IDC_COMBO4, 0x403, 6, 0
+0x614d, 0x6b73, 0x0031, 
+    IDC_COMBO4, 0x403, 6, 0
+0x614d, 0x6b73, 0x0032, 
+    IDC_COMBO4, 0x403, 6, 0
+0x614d, 0x6b73, 0x0033, 
+    IDC_COMBO4, 0x403, 5, 0
+0xdba6, 0x71ad, "\000" 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDR_MAINFRAME           "vision1\n\nVision\n\n\nVision1.Document\nVision Document"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "vision1"
+    AFX_IDS_IDLEMESSAGE     "就緒"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_NEW             "產生一新文件\n開啟新檔"
+    ID_FILE_OPEN            "開啟一舊文件\n開啟舊檔"
+    ID_FILE_CLOSE           "關閉目前的文件\n關閉"
+    ID_FILE_SAVE            "儲存目前的文件\n儲存檔案"
+    ID_FILE_SAVE_AS         "另外用一新名稱儲存目前的文件\n另存新檔"
+    ID_FILE_PAGE_SETUP      "改變列印選項\n版面設定"
+    ID_FILE_PRINT_SETUP     "改變印表機和列印選項\n列印設定"
+    ID_FILE_PRINT           "列印目前的文件\n列印"
+    ID_FILE_PRINT_PREVIEW   "顯示整頁\n預覽列印"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_APP_ABOUT            "顯示程式的資訊， 版本及版權\n關於"
+    ID_APP_EXIT             "結束應用程式並提示儲存檔案\n結束"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_MRU_FILE1       "開啟這個文件"
+    ID_FILE_MRU_FILE2       "開啟這個文件"
+    ID_FILE_MRU_FILE3       "開啟這個文件"
+    ID_FILE_MRU_FILE4       "開啟這個文件"
+    ID_FILE_MRU_FILE5       "開啟這個文件"
+    ID_FILE_MRU_FILE6       "開啟這個文件"
+    ID_FILE_MRU_FILE7       "開啟這個文件"
+    ID_FILE_MRU_FILE8       "開啟這個文件"
+    ID_FILE_MRU_FILE9       "開啟這個文件"
+    ID_FILE_MRU_FILE10      "開啟這個文件"
+    ID_FILE_MRU_FILE11      "開啟這個文件"
+    ID_FILE_MRU_FILE12      "開啟這個文件"
+    ID_FILE_MRU_FILE13      "開啟這個文件"
+    ID_FILE_MRU_FILE14      "開啟這個文件"
+    ID_FILE_MRU_FILE15      "開啟這個文件"
+    ID_FILE_MRU_FILE16      "開啟這個文件"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_NEXT_PANE            "切換到下一個窗格\n下一個窗格"
+    ID_PREV_PANE            "切換到上一個窗格\n上一個窗格"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_WINDOW_SPLIT         "分割目前的視窗\n分割"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_EDIT_CLEAR           "刪除選取內容\n刪除"
+    ID_EDIT_CLEAR_ALL       "全部刪除\n全部刪除"
+    ID_EDIT_COPY            "複製選取內容到剪貼簿中\n複製"
+    ID_EDIT_CUT             "剪下選取內容到剪貼簿中\n剪下"
+    ID_EDIT_FIND            "尋找指定文字\n尋找"
+    ID_EDIT_PASTE           "插入剪貼簿內容\n貼上"
+    ID_EDIT_REPEAT          "重複前一動作\n重複"
+    ID_EDIT_REPLACE         "以不同文字取代指定之文字\n取代"
+    ID_EDIT_SELECT_ALL      "選取整篇文件\n選取全部"
+    ID_EDIT_UNDO            "復原上一次動作\n復原"
+    ID_EDIT_REDO            "重做前一個復原的動作\n重做"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_TOOLBAR         "隱藏或顯示工具列\n切換工具列"
+    ID_VIEW_STATUS_BAR      "隱藏或顯示狀態列\n切換狀態列"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCSIZE          "改變視窗大小"
+    AFX_IDS_SCMOVE          "改變視窗位置"
+    AFX_IDS_SCMINIMIZE      "縮小視窗到一圖示"
+    AFX_IDS_SCMAXIMIZE      "放大視窗到全螢幕"
+    AFX_IDS_SCNEXTWINDOW    "切換到下一個文件視窗"
+    AFX_IDS_SCPREVWINDOW    "切換到前一個文件視窗"
+    AFX_IDS_SCCLOSE         "關閉工作中視窗並提示儲存文件"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCRESTORE       "還原視窗至原來大小"
+    AFX_IDS_SCTASKLIST      "叫出「工作列」"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_PREVIEW_CLOSE   "關閉「預覽列印」模式\n取消預覽"
+END
+
+#endif    // 中文 (台灣) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHT)
+#ifdef _WIN32
+LANGUAGE 4, 1
+#pragma code_page(950)
+#endif //_WIN32
+#include "res\vision1.rc2"  // non-Microsoft Visual C++ edited resources
+#include "l.cht\afxres.rc"          // Standard components
+#include "l.cht\afxprint.rc"        // printing/print preview resources
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
