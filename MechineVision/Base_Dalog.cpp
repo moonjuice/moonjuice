@@ -5,6 +5,11 @@
 #include "vision1.h"
 #include "Base_Dalog.h"
 #include "Mask.h"
+#include <fstream>
+#include <cmath>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -1350,5 +1355,44 @@ void Base_Dalog::doLogFunction()
 ///中值濾波
 void Base_Dalog::doMedianFilter()
 {
-	// TODO: 在此加入控制項告知處理常式程式碼
+	UpdateData(TRUE); //更新所有變數值。
+	if(maskSize < 3)
+		MessageBox("遮罩大小必須大於3!!", "Error", MB_ICONERROR | MB_OK);
+	else
+	{
+		int mask_start = 0 - (maskSize-1)/2;
+		int mask_end = 0 + (maskSize-1)/2;
+		for(int i=((maskSize-1)/2);i<(Width-((maskSize-1)/2));i++)
+		{
+			for(int j=((maskSize-1)/2);j<(Width-((maskSize-1)/2));j++)
+			{
+				if(i<(maskSize-1)/2 || j<(maskSize-1)/2)
+					DataImage2[i*Width+j] = DataImage1[i*Width+j];
+				else
+				{
+					//將遮罩範圍放入Vector
+					std::vector<int> maskTemp(maskSize*maskSize);
+					int count=0;
+					for (int k1=mask_start; k1<=mask_end; ++k1) 
+					{
+						for (int k2=mask_start; k2<=mask_end; ++k2) 
+						{
+							maskTemp[0 + count] = (int)DataImage1[((i+k1)*Width) + (j+k2)];
+							count = count + 1;
+						}			
+					}
+					//進行排序
+					sort(maskTemp.begin(), maskTemp.end());
+					
+					//取出中間值後，放到DataImage2
+					DataImage2[i*Width+j] = (unsigned char)maskTemp[((maskSize-1)/2)+1];
+
+					maskTemp.clear();
+					count = 0;
+				}
+			}
+		}
+	}
+	ShowImage2 = Show_Image_Tran(DataImage2);
+	OnPaint();
 }
