@@ -17,6 +17,10 @@ static char THIS_FILE[] = __FILE__;
 
 Base_Dalog::Base_Dalog(CWnd* pParent /*=NULL*/)
 	: CDialog(Base_Dalog::IDD, pParent)
+	, C1(0)
+	, C3(0)
+	, C2(0)
+	, maskSize(0)
 {
 	//{{AFX_DATA_INIT(Base_Dalog)
 	m_threshlod = 51;
@@ -118,6 +122,10 @@ void Base_Dalog::DoDataExchange(CDataExchange* pDX)
 	DDX_CBIndex(pDX, IDC_COMBO8, m_line);
 	DDX_Text(pDX, IDC_DEL_Pixel, m_del_pixel);
 	//}}AFX_DATA_MAP
+	DDX_Text(pDX, IDC_EDIT1, C1);
+	DDX_Text(pDX, IDC_EDIT2, C2);
+	DDX_Text(pDX, IDC_EDIT3, C3);
+	DDX_Text(pDX, IDC_EDIT4, maskSize);
 }
 
 
@@ -154,6 +162,8 @@ BEGIN_MESSAGE_MAP(Base_Dalog, CDialog)
 	ON_BN_CLICKED(IDC_Line_Edge, OnLineEdge)
 	ON_EN_CHANGE(IDC_DEL_Pixel, OnChangeDELPixel)
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_BUTTON2, &Base_Dalog::doLogFunction)
+	ON_BN_CLICKED(IDC_BUTTON3, &Base_Dalog::doMedianFilter)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1323,4 +1333,22 @@ void Base_Dalog::OnChangeDELPixel()
 {
 	UpdateData();//更新變數資料
 	
+}
+///暗部突顯
+void Base_Dalog::doLogFunction()
+{
+	UpdateData(TRUE); //更新所有變數值。	
+	//公式：C1 * log(C2 * B_in) + C3。
+	for(int i=0; i<Height; i++) {
+		for(int j=0; j<Width; j++) {			
+			DataImage2[i*Width + j] = (unsigned char)C1 * (int)log((double)(DataImage1[i*Width + j] * C2)) + C3;			
+		}
+	}
+	ShowImage2 = Show_Image_Tran(DataImage2);
+	OnPaint();
+}
+///中值濾波
+void Base_Dalog::doMedianFilter()
+{
+	// TODO: 在此加入控制項告知處理常式程式碼
 }

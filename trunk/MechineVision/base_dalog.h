@@ -7,6 +7,7 @@
 // Base_Dalog.h : header file
 //
 #include "DIB.h"
+#include "math.h"
 /////////////////////////////////////////////////////////////////////////////
 // Base_Dalog dialog
 
@@ -100,6 +101,13 @@ protected:
 	afx_msg void OnChangeDELPixel();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void doLogFunction();
+	afx_msg void doMedianFilter();
+	int C1;
+	int C3;
+	int C2;
+	int maskSize;
 };
 
 //{{AFX_INSERT_LOCATION}}

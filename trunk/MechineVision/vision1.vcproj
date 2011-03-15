@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="vision1"
 	ProjectGUID="{6DA57EA9-19F0-4229-86DC-E81CF99150E6}"
+	RootNamespace="vision1"
 	Keyword="MFCProj"
 	TargetFrameworkVersion="131072"
 	>
@@ -462,6 +463,10 @@
 			</File>
 			<File
 				RelativePath="image2.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\logFunction.bmp"
 				>
 			</File>
 			<File
