@@ -1356,12 +1356,15 @@ void Base_Dalog::doLogFunction()
 void Base_Dalog::doMedianFilter()
 {
 	UpdateData(TRUE); //更新所有變數值。
+	//判斷遮罩大小是否小於3
 	if(maskSize < 3)
 		MessageBox("遮罩大小必須大於3!!", "Error", MB_ICONERROR | MB_OK);
 	else
 	{
-		int mask_start = 0 - (maskSize-1)/2;
-		int mask_end = 0 + (maskSize-1)/2;
+		// r = (遮罩大小-1)/2
+		// 遮罩範圍 -r~r
+		int mask_start = 0 - (maskSize-1)/2; //-r
+		int mask_end = 0 + (maskSize-1)/2; //r
 		for(int i=((maskSize-1)/2);i<(Width-((maskSize-1)/2));i++)
 		{
 			for(int j=((maskSize-1)/2);j<(Width-((maskSize-1)/2));j++)
@@ -1370,9 +1373,9 @@ void Base_Dalog::doMedianFilter()
 					DataImage2[i*Width+j] = DataImage1[i*Width+j];
 				else
 				{
-					//將遮罩範圍放入Vector
 					std::vector<int> maskTemp(maskSize*maskSize);
 					int count=0;
+					//將遮罩範圍放入Vector
 					for (int k1=mask_start; k1<=mask_end; ++k1) 
 					{
 						for (int k2=mask_start; k2<=mask_end; ++k2) 
