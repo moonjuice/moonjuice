@@ -13,21 +13,40 @@ using System.Threading;
 
 namespace AutoVote
 {
+    /// <summary>
+    /// 主要的介面類別
+    /// </summary>
     public partial class Form1 : Form
     {
         private voteWork workerObject;
         private Thread workerThread;
+        /// <summary>
+        /// 建構子
+        /// </summary>
         public Form1()
         {
+            //初始化界面
             InitializeComponent();
+            //新增執行緒任務
             workerObject = new voteWork(result, nameText.Text, phoneText.Text, mailText.Text);
+            //新增執行緒
             workerThread = new Thread(workerObject.DoWork);
         }
+        /// <summary>
+        /// 執行續任務的類別
+        /// </summary>
         class voteWork
         {
             private RichTextBox result;
             private String name, phone, mail;
             private volatile bool _shouldStop = false;
+            /// <summary>
+            /// 建構子
+            /// </summary>
+            /// <param name="r">RichTextBox，要顯示訊息的地方</param>
+            /// <param name="n">姓名</param>
+            /// <param name="p">電話</param>
+            /// <param name="m">地址</param>
             public voteWork(RichTextBox r,String n,String p,String m)
             {
                 this.result = r;
@@ -35,16 +54,24 @@ namespace AutoVote
                 this.mail = m;
                 this.phone = p;
             }
+            /// <summary>
+            /// 執行續要執行的任務在這邊
+            /// </summary>
             public void DoWork()
             {
                  while (!_shouldStop)
                  {
+                     //如果投票成功，等60分鐘再投票
                     if (voteFunction())
                         waitMinute(60);
                     else
+                        //如果失敗，則15分鐘在投票一次
                         waitMinute(15);
                  }
             }
+            /// <summary>
+            /// 執行緒停止要呼叫的function
+            /// </summary>
             public void RequestStop()
             {
                 _shouldStop = true;
@@ -52,6 +79,9 @@ namespace AutoVote
                 result.BeginInvoke(new MethodInvoker(delegate { result.AppendText("_shouldStop : " + _shouldStop.ToString() + "\n"); }));
 #endif
             }
+            /// <summary>
+            /// 真正投票的function
+            /// </summary>
             private bool voteFunction()
             {
                 System.Net.ServicePointManager.Expect100Continue = false;//解決417錯誤
@@ -105,6 +135,10 @@ namespace AutoVote
                     return true;
                 }
             }
+            /// <summary>
+            /// 讓執行緒等待一段時間
+            /// </summary>
+            /// <param name="m">等待的分鐘數</param>
             private void waitMinute(int m)
             {
                 for (int i = 0; i < m; i++)
@@ -128,6 +162,11 @@ namespace AutoVote
                 }
             }
         }
+        /// <summary>
+        /// 按下投票按鈕的function
+        /// </summary>
+        /// <param name="sender">觸發的物件</param>
+        /// <param name="e">觸發的事件</param>
         private void vote_Click(object sender, EventArgs e)
         {
 #if DEBUG
