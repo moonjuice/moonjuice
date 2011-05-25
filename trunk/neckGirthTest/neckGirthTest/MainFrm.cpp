@@ -273,15 +273,15 @@ void CMainFrame::readBMP()
 
 		for (int i=0;i<zeroPoint.size();i++)
 		{
-			xData[i][0] = cos(zeroPoint[i].getX()+0.0);
+			xData[i][0] = cos(zeroPoint[i].getX()*3.1415926*2/width);
 			xData[i][1] = 1;
 			yData[i][0] = zeroPoint[i].getY();
 		}
 		for (int i=0;i<zeroPoint.size();i++)
 		{
-			xData[i+zeroPoint.size()][0] = cos(zeroPoint[i].getX()+0.0)*cos(zeroPoint[i].getX()+0.0);
-			xData[i+zeroPoint.size()][1] = cos(zeroPoint[i].getX()+0.0);
-			yData[i+zeroPoint.size()][0] = zeroPoint[i].getY()*cos((zeroPoint[i].getX()+0.0));
+			xData[i+zeroPoint.size()][0] = cos(zeroPoint[i].getX()*3.1415926*2/width)*cos(zeroPoint[i].getX()*3.1415926*2/width);
+			xData[i+zeroPoint.size()][1] = cos(zeroPoint[i].getX()*3.1415926*2/width);
+			yData[i+zeroPoint.size()][0] = zeroPoint[i].getY()*cos((zeroPoint[i].getX()*3.1415926*2/width));
 		}
 		matrixA B(zeroPoint.size()*2,1,yData);
 		matrixA A(zeroPoint.size()*2,2,xData);
@@ -324,7 +324,8 @@ void CMainFrame::readBMP()
 		vector<Point> fit;
 		for(int i=0;i<width;i++)
 		{
-			int y = a0*height/3.1415926/2 * cos(i*3.1415926*2/width) +a1;
+			//int y = a0*height/3.1415926/2 * cos(i*3.1415926*2/width) +a1;
+			int y = a0 * cos(i*3.1415926*2/width) +a1;
 			fit.push_back(Point(i,y,0));
 		}
 		//¿é¤J¹ÏÀÉ
