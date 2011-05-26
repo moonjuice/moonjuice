@@ -207,7 +207,7 @@ void CMainFrame::readBMP()
 			}
 		}
 		//對經線做第二次sobel
-		for (int i=0;i<width;i++)
+		/*for (int i=0;i<width;i++)
 		{
 			for (int j=0;j<height;j++)
 			{
@@ -219,12 +219,12 @@ void CMainFrame::readBMP()
 				}
 				sobelData2[i][j] = sobelTemp;
 			}
-		}
+		}*/
 		//取出第一個過零點
 		vector<Point> zeroPoint;
 		for (int i=0;i<width;i++)
 		{
-			for (int j=(height/2);j<height;j++)
+			for (int j=(height/3*2);j<height;j++)
 			{
 				if (destData[i][j]<80 && sobelData[i][j]<0 && sobelData[i][j]*sobelData[i][j+1]<0)
 				{
@@ -255,10 +255,18 @@ void CMainFrame::readBMP()
 			else if(gray[i][0]==0 && gray[width-i-1][0]!=0)
 				gray[i][0] = gray[width-i-1][0];
 		}
-		zeroPoint.clear();
-		for (int i=0;i<width;i++)
+		//過零點
+		for (int i=0;i<zeroPoint.size();i++)
+		{
+			srcImg.SetPixel(zeroPoint[i].getX(),zeroPoint[i].getY(),RGB(255,255,0));
+		}
+		//取(1/4*width)-10 ~ (3/4*width)+10 的資料
+		/*zeroPoint.clear();
+		for (int i=(width/4)-10;i<(width/4*3)+10;i++)
+		{
 			zeroPoint.push_back(Point(i,gray[i][0],0));
-		//擬合
+		}*/
+		//第一次擬合
 		double **cof = new double *[2];
 		for (int i=0;i<2;i++)
 			cof[i] = new double[1];
@@ -287,78 +295,82 @@ void CMainFrame::readBMP()
 		matrixA A(zeroPoint.size()*2,2,xData);
 		matrixA C(2,1,0.0);
 		
-
-		//sigma 方法
-		/*double **xData = new double *[2];
-		xData[0] = new double[2];
-		xData[1] = new double[2];
-
-		double **yData = new double *[2];
-		yData[0] = new double[1];
-		yData[1] = new double[1];
-
-		xData[0][0] = 1.0;
-		xData[0][1] = 0.0;
-		xData[1][0] = 0.0;
-		xData[1][1] = 0.0;
-		yData[0][0] = 0.0;
-		yData[1][0] = 0.0;
-
-		for (int i=0;i<zeroPoint.size();i++)
-		{
-			double temp = cos(zeroPoint[i].getX());
-			xData[0][1] += temp;
-			xData[1][0] += temp;
-			xData[1][1] += temp*temp;
-			yData[0][0] += zeroPoint[i].getY();
-			yData[1][0] += zeroPoint[i].getY()*temp;
-		}
-
-		matrixA B(2,1,yData);
-		matrixA A(2,2,xData);
-		matrixA C(2,1,0.0);*/
-
 		C = A.PseudoInverse()*B;
 		double a0 = C.arr[0][0];
 		double a1 = C.arr[1][0];
-		vector<Point> fit;
+		vector<Point> firstFit;
 		for(int i=0;i<width;i++)
 		{
-			//int y = a0*height/3.1415926/2 * cos(i*3.1415926*2/width) +a1;
 			int y = a0 * cos(i*3.1415926*2/width) +a1;
-			fit.push_back(Point(i,y,0));
+			firstFit.push_back(Point(i,y,0));
 		}
-		//輸入圖檔
-		CImage test;		
-		test.Create(width,height,24);
+		//輸出圖檔
+		//過零點
+		/*for (int i=0;i<zeroPoint.size();i++)
+		{
+			srcImg.SetPixel(zeroPoint[i].getX(),zeroPoint[i].getY(),RGB(255,255,0));
+		}*/
+		//擬合線
+		for(int i=0;i<firstFit.size();i++)
+		{
+			srcImg.SetPixel(firstFit[i].getX(),firstFit[i].getY(),RGB(255,0,255));
+		}
+		srcImg.Save(fd.GetFolderPath()+"\\testUpperNeckGirthFirstFit.bmp");
+		//篩選
+		zeroPoint.clear();
 		for (int i=0;i<width;i++)
 		{
-			for (int j=0;j<height;j++)
+			if (gray[i][0]!=0 && abs(firstFit[i].getY() - gray[i][0])<10)
 			{
-				test.SetPixel(i,j,RGB(destData[i][j],destData[i][j],destData[i][j]));
+				zeroPoint.push_back(Point(i,gray[i][0],0));
 			}
 		}
-		//黃色 255，255，0
-		for (int i=0;i<width;i++)
+		//第二次擬合
+		xData = new double *[zeroPoint.size()*2];
+		for (int i=0;i<zeroPoint.size()*2;i++)
+			xData[i] = new double[2];
+
+		yData = new double *[zeroPoint.size()*2];
+		for (int i=0;i<zeroPoint.size()*2;i++)
+			yData[i] = new double[1];
+		for (int i=0;i<zeroPoint.size();i++)
 		{
-			for (int j=(height/2);j<height;j++)
-			{
-				if (destData[i][j]<80 && sobelData[i][j]<0 && sobelData[i][j]*sobelData[i][j+1]<0)
-				{
-					srcImg.SetPixel(i,j,RGB(255,255,0));
-					//test.SetPixel(i,j,RGB(255,255,0));
-					break;
-				}
-			}
+			xData[i][0] = cos(zeroPoint[i].getX()*3.1415926*2/width);
+			xData[i][1] = 1;
+			yData[i][0] = zeroPoint[i].getY();
+		}
+		for (int i=0;i<zeroPoint.size();i++)
+		{
+			xData[i+zeroPoint.size()][0] = cos(zeroPoint[i].getX()*3.1415926*2/width)*cos(zeroPoint[i].getX()*3.1415926*2/width);
+			xData[i+zeroPoint.size()][1] = cos(zeroPoint[i].getX()*3.1415926*2/width);
+			yData[i+zeroPoint.size()][0] = zeroPoint[i].getY()*cos((zeroPoint[i].getX()*3.1415926*2/width));
+		}
+		matrixA B2(zeroPoint.size()*2,1,yData);
+		matrixA A2(zeroPoint.size()*2,2,xData);
+		matrixA C2(2,1,0.0);
+
+		C2 = A2.PseudoInverse()*B2;
+		a0 = C2.arr[0][0];
+		a1 = C2.arr[1][0];
+		vector<Point> secondFit;
+		for(int i=0;i<width;i++)
+		{
+			int y = a0 * cos(i*3.1415926*2/width) +a1;
+			secondFit.push_back(Point(i,y,0));
+		}
+		//輸出圖檔
+		//過零點
+		for (int i=0;i<zeroPoint.size();i++)
+		{
+			destImg.SetPixel(zeroPoint[i].getX(),zeroPoint[i].getY(),RGB(255,255,0));
 		}
 		//擬合線
-		for(int i=0;i<fit.size();i++)
+		for(int i=0;i<secondFit.size();i++)
 		{
-			srcImg.SetPixel(fit[i].getX(),fit[i].getY(),RGB(255,0,255));
-			//test.SetPixel(fit[i].getX(),fit[i].getY(),RGB(255,0,255));
+			destImg.SetPixel(secondFit[i].getX(),secondFit[i].getY(),RGB(0,255,255));
 		}
-		//test.Save(fd.GetFolderPath()+"\\testUpperNeckGirth.bmp");
-		srcImg.Save(fd.GetFolderPath()+"\\testUpperNeckGirthWithGray.bmp");
+		destImg.Save(fd.GetFolderPath()+"\\testUpperNeckGirthFinal.bmp");
+		
 		AfxMessageBox("OK!!");
 		for(int y = 0; y != zeroPoint.size()*2; ++y)
 		{
