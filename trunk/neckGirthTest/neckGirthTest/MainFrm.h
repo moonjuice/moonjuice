@@ -13,10 +13,14 @@ protected: // 僅從序列化建立
 
 // 屬性
 public:
+	CString path;
+	int width,height;
+	double frontUpperNeckZ;
 
 // 作業
 public:
-	void readBMP();
+	void upperNeckGirth();
+	void downNeckGirth();
 	void buildImage();
 
 // 覆寫
