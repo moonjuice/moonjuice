@@ -112,17 +112,16 @@ void CMainFrame::Dump(CDumpContext& dc) const
 void CMainFrame::onNeckGirthTest()
 {			
 #ifdef _DEBUG
-	readBMP();
+	upperNeckGirth();
+	downNeckGirth();
 	//buildImage();
 #endif		
 }
 
-void CMainFrame::readBMP()
+void CMainFrame::upperNeckGirth()
 {
 	CFileDialog fd(true);
-	CString path;
 	CImage srcImg,destImg;
-	int width,height;
 	int sobelMask[11] = {-1,-1,-1,-1,-1,0,1,1,1,1,1};
 	int maskLength = 11;
 	if(fd.DoModal()==IDOK)
@@ -130,6 +129,7 @@ void CMainFrame::readBMP()
 		//讀取身體圖片
 		path = fd.GetPathName();
 		srcImg.Load(path);
+		path = fd.GetFolderPath();
 		//取出0.5~2h
 		width = srcImg.GetWidth();
 		height = srcImg.GetHeight();
@@ -166,7 +166,7 @@ void CMainFrame::readBMP()
 		{
 			memcpy( destPtr+i*destPitch, srcPtr+i*srcPitch, abs(srcPitch) );
 		} 
-		destImg.Save(fd.GetFolderPath()+"\\oriUpperNeckGirth.bmp");
+		destImg.Save(path+"\\oriUpperNeckGirth.bmp");
 		//初始化陣列
 		int **destData = (int **)malloc(width * sizeof(void *));
 		for(int y = 0; y != width; ++y)
@@ -206,20 +206,6 @@ void CMainFrame::readBMP()
 				sobelData[i][j] = sobelTemp;
 			}
 		}
-		//對經線做第二次sobel
-		/*for (int i=0;i<width;i++)
-		{
-			for (int j=0;j<height;j++)
-			{
-				int sobelTemp=0;
-				for (int k=0;k<maskLength;k++)
-				{
-					int index = (height-(maskLength/2)+k+j)%height;
-					sobelTemp = sobelTemp + (sobelMask[k]*sobelData[i][index]);
-				}
-				sobelData2[i][j] = sobelTemp;
-			}
-		}*/
 		//取出第一個過零點
 		vector<Point> zeroPoint;
 		for (int i=0;i<width;i++)
@@ -255,17 +241,6 @@ void CMainFrame::readBMP()
 			else if(gray[i][0]==0 && gray[width-i-1][0]!=0)
 				gray[i][0] = gray[width-i-1][0];
 		}
-		//過零點
-		for (int i=0;i<zeroPoint.size();i++)
-		{
-			srcImg.SetPixel(zeroPoint[i].getX(),zeroPoint[i].getY(),RGB(255,255,0));
-		}
-		//取(1/4*width)-10 ~ (3/4*width)+10 的資料
-		/*zeroPoint.clear();
-		for (int i=(width/4)-10;i<(width/4*3)+10;i++)
-		{
-			zeroPoint.push_back(Point(i,gray[i][0],0));
-		}*/
 		//第一次擬合
 		double **cof = new double *[2];
 		for (int i=0;i<2;i++)
@@ -304,18 +279,6 @@ void CMainFrame::readBMP()
 			int y = a0 * cos(i*3.1415926*2/width) +a1;
 			firstFit.push_back(Point(i,y,0));
 		}
-		//輸出圖檔
-		//過零點
-		/*for (int i=0;i<zeroPoint.size();i++)
-		{
-			srcImg.SetPixel(zeroPoint[i].getX(),zeroPoint[i].getY(),RGB(255,255,0));
-		}*/
-		//擬合線
-		for(int i=0;i<firstFit.size();i++)
-		{
-			srcImg.SetPixel(firstFit[i].getX(),firstFit[i].getY(),RGB(255,0,255));
-		}
-		srcImg.Save(fd.GetFolderPath()+"\\testUpperNeckGirthFirstFit.bmp");
 		//篩選
 		zeroPoint.clear();
 		for (int i=0;i<width;i++)
@@ -358,20 +321,64 @@ void CMainFrame::readBMP()
 			int y = a0 * cos(i*3.1415926*2/width) +a1;
 			secondFit.push_back(Point(i,y,0));
 		}
+		//讀取最高點高度
+		ifstream read;
+		double maxZ;
+		read.open(path+"\\Body.asc");
+		if (read.is_open())
+		{
+			string line;
+			std::getline(read,line);
+			//分割字串
+			vector<string> tokens;
+			istringstream iss(line);
+			copy(istream_iterator<string>(iss),
+				istream_iterator<string>(),
+				back_inserter<vector<string> >(tokens));
+			maxZ=atof(tokens[2].c_str());
+		}
+		read.close();
+		//讀取前上頸點高度
+		read.open(path+"\\frontUpperNeck.asc");
+		if (read.is_open())
+		{
+			string line;
+			std::getline(read,line);
+			//分割字串
+			vector<string> tokens;
+			istringstream iss(line);
+			copy(istream_iterator<string>(iss),
+				istream_iterator<string>(),
+				back_inserter<vector<string> >(tokens));
+			frontUpperNeckZ=atof(tokens[2].c_str());
+		}
+		read.close();
+		//平移前的擬合線
+		for(int i=0;i<secondFit.size();i++)
+		{
+			srcImg.SetPixel(secondFit[i].getX(),secondFit[i].getY(),RGB(255,0,255));
+		}
+		//曲線平移
+		double offset = maxZ - frontUpperNeckZ;
+		offset = secondFit[secondFit.size()/2].getY() - offset;
+		for (int i=0;i<secondFit.size();i++)
+		{
+			secondFit[i].setY(secondFit[i].getY() - offset);
+		}
 		//輸出圖檔
 		//過零點
 		for (int i=0;i<zeroPoint.size();i++)
 		{
-			destImg.SetPixel(zeroPoint[i].getX(),zeroPoint[i].getY(),RGB(255,255,0));
+			srcImg.SetPixel(zeroPoint[i].getX(),zeroPoint[i].getY(),RGB(255,255,0));
 		}
 		//擬合線
 		for(int i=0;i<secondFit.size();i++)
 		{
-			destImg.SetPixel(secondFit[i].getX(),secondFit[i].getY(),RGB(0,255,255));
+			srcImg.SetPixel(secondFit[i].getX(),secondFit[i].getY(),RGB(0,255,255));
 		}
-		destImg.Save(fd.GetFolderPath()+"\\testUpperNeckGirthFinal.bmp");
+		srcImg.Save(path+"\\testUpperNeckGirthFinal.bmp");
 		
-		AfxMessageBox("OK!!");
+		AfxMessageBox("upperNeckGirth OK!!");
 		for(int y = 0; y != zeroPoint.size()*2; ++y)
 		{
 			free(xData[y]);
@@ -380,6 +387,106 @@ void CMainFrame::readBMP()
 		free(xData);
 		free(yData);
 		free(cof);
+	}
+}
+
+void CMainFrame::downNeckGirth()
+{
+	CFileDialog fd(true);
+	CImage srcImg,destImg;
+	int sobelMask[11] = {-1,-1,-1,-1,-1,0,1,1,1,1,1};
+	int maskLength = 11;
+	if(fd.DoModal()==IDOK)
+	{
+		//讀取身體圖片
+		path = fd.GetPathName();
+		srcImg.Load(path);
+		path = fd.GetFolderPath();
+		//取得肩部部分(前上頸點~左右肩端點取高點+10)
+		ifstream read;
+		double leftZ,rightZ;//左右肩端點高度
+		double shoulderheight;
+		read.open(path+"\\CutResult.asc");
+		if (read.is_open())
+		{
+			string line;
+			vector<string> tokens;
+			std::getline(read,line);
+			std::getline(read,line);
+			std::getline(read,line);
+			std::getline(read,line);
+			std::getline(read,line);
+			istringstream iss(line);
+			copy(istream_iterator<string>(iss),
+				istream_iterator<string>(),
+				back_inserter<vector<string> >(tokens));
+			leftZ=atof(tokens[2].c_str());
+			tokens.clear();
+			std::getline(read,line);
+			istringstream iss2(line);
+			copy(istream_iterator<string>(iss2),
+				istream_iterator<string>(),
+				back_inserter<vector<string> >(tokens));
+			rightZ=atof(tokens[2].c_str());
+		}
+		if (leftZ>rightZ)
+			shoulderheight = frontUpperNeckZ - leftZ+10;
+		else
+			shoulderheight = frontUpperNeckZ - rightZ+10;
+		width = srcImg.GetWidth();
+		height = shoulderheight;
+		//原始影像參數
+		BYTE* srcPtr=(BYTE*)srcImg.GetBits();
+		int srcBitsCount=srcImg.GetBPP();
+		int srcPitch=srcImg.GetPitch(); 
+		//創建新圖像
+		if(srcBitsCount==32)   //支援alpha通道		
+		{
+			destImg.Create(width,height,srcBitsCount,1);
+		}
+		else
+		{
+			destImg.Create(width,height,srcBitsCount,0);
+		}
+		//加載調色板
+		if(srcBitsCount<=8 && srcImg.IsIndexed())//需要調色盤
+		{
+			RGBQUAD pal[256];
+			int nColors=srcImg.GetMaxColorTableEntries();
+			if(nColors>0)
+			{
+				srcImg.GetColorTable(0,nColors,pal);
+				destImg.SetColorTable(0,nColors,pal);//複製調色盤
+			} 
+		} 
+		//目標影像參數
+		BYTE *destPtr=(BYTE*)destImg.GetBits();
+		int destPitch=destImg.GetPitch();
+		//讀取最高點高度
+		read.close();
+		double maxZ;
+		read.open(path+"\\Body.asc");
+		if (read.is_open())
+		{
+			string line;
+			std::getline(read,line);
+			//分割字串
+			vector<string> tokens;
+			istringstream iss(line);
+			copy(istream_iterator<string>(iss),
+				istream_iterator<string>(),
+				back_inserter<vector<string> >(tokens));
+			maxZ=atof(tokens[2].c_str());
+		}
+		read.close();
+		int offset = width*(maxZ-frontUpperNeckZ)*srcPitch;
+		//複製影像數據
+		for(int i=0 ; i<height;i++)
+		{
+			memcpy( destPtr+i*destPitch, srcPtr+i*srcPitch+(offset), abs(srcPitch) );
+		} 
+		destImg.Save(path+"\\oriDownNeckGirth.bmp");
+		//找出前下頸點
 	}
 }
 
