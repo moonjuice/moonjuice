@@ -28,18 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.resultText = new System.Windows.Forms.RichTextBox();
             this.enter = new System.Windows.Forms.Button();
             this.urlText = new System.Windows.Forms.TextBox();
+            this.resultText = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
-            // 
-            // resultText
-            // 
-            this.resultText.Location = new System.Drawing.Point(13, 41);
-            this.resultText.Name = "resultText";
-            this.resultText.Size = new System.Drawing.Size(342, 270);
-            this.resultText.TabIndex = 0;
-            this.resultText.Text = "";
             // 
             // enter
             // 
@@ -58,14 +50,23 @@
             this.urlText.Size = new System.Drawing.Size(307, 22);
             this.urlText.TabIndex = 2;
             // 
+            // resultText
+            // 
+            this.resultText.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.resultText.Location = new System.Drawing.Point(0, 41);
+            this.resultText.Name = "resultText";
+            this.resultText.Size = new System.Drawing.Size(367, 282);
+            this.resultText.TabIndex = 3;
+            this.resultText.Text = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(367, 323);
+            this.Controls.Add(this.resultText);
             this.Controls.Add(this.urlText);
             this.Controls.Add(this.enter);
-            this.Controls.Add(this.resultText);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
@@ -75,9 +76,9 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox resultText;
         private System.Windows.Forms.Button enter;
         private System.Windows.Forms.TextBox urlText;
+        private System.Windows.Forms.RichTextBox resultText;
     }
 }
 
