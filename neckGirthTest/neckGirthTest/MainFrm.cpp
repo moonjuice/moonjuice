@@ -112,7 +112,7 @@ void CMainFrame::Dump(CDumpContext& dc) const
 void CMainFrame::onNeckGirthTest()
 {			
 #ifdef _DEBUG
-	upperNeckGirth();
+	//upperNeckGirth();
 	downNeckGirth();
 	//buildImage();
 #endif		
@@ -192,7 +192,7 @@ void CMainFrame::upperNeckGirth()
 					destData[i][j]=255;*/
 			}
 		}
-		//對經線做第一次sobel
+		//對經線做sobel
 		for (int i=0;i<width;i++)
 		{
 			for (int j=0;j<height;j++)
@@ -394,18 +394,18 @@ void CMainFrame::downNeckGirth()
 {
 	CFileDialog fd(true);
 	CImage srcImg,destImg;
-	int sobelMask[11] = {-1,-1,-1,-1,-1,0,1,1,1,1,1};
-	int maskLength = 11;
+	int sobelMask[7] = {-1,-1,-1,0,1,1,1};
+	int maskLength = 7;
+	double frontDownNeckZ;
 	if(fd.DoModal()==IDOK)
 	{
 		//讀取身體圖片
 		path = fd.GetPathName();
 		srcImg.Load(path);
 		path = fd.GetFolderPath();
-		//取得肩部部分(前上頸點~左右肩端點取高點+10)
+		//取得肩部部分(前上頸點~肩端點最低高度+10)
 		ifstream read;
-		double leftZ,rightZ;//左右肩端點高度
-		double shoulderheight;
+		double leftY,leftZ,rightY,rightZ;//左右肩端點高度
 		read.open(path+"\\CutResult.asc");
 		if (read.is_open())
 		{
@@ -420,6 +420,7 @@ void CMainFrame::downNeckGirth()
 			copy(istream_iterator<string>(iss),
 				istream_iterator<string>(),
 				back_inserter<vector<string> >(tokens));
+			leftY = atof(tokens[1].c_str());
 			leftZ=atof(tokens[2].c_str());
 			tokens.clear();
 			std::getline(read,line);
@@ -427,14 +428,33 @@ void CMainFrame::downNeckGirth()
 			copy(istream_iterator<string>(iss2),
 				istream_iterator<string>(),
 				back_inserter<vector<string> >(tokens));
+			rightY = atof(tokens[1].c_str());
 			rightZ=atof(tokens[2].c_str());
-		}
-		if (leftZ>rightZ)
-			shoulderheight = frontUpperNeckZ - leftZ+10;
-		else
-			shoulderheight = frontUpperNeckZ - rightZ+10;
+			tokens.clear();
+		}	
 		width = srcImg.GetWidth();
-		height = shoulderheight;
+		height = srcImg.GetHeight();
+		//讀取最高點高度
+		read.close();
+		double maxZ;
+		read.open(path+"\\Body.asc");
+		if (read.is_open())
+		{
+			string line;
+			std::getline(read,line);
+			//分割字串
+			vector<string> tokens;
+			istringstream iss(line);
+			copy(istream_iterator<string>(iss),
+				istream_iterator<string>(),
+				back_inserter<vector<string> >(tokens));
+			maxZ=atof(tokens[2].c_str());
+		}
+		read.close();
+		if (rightZ>leftZ)
+			height = maxZ - leftZ +10;
+		else
+			height = maxZ - rightZ +10;
 		//原始影像參數
 		BYTE* srcPtr=(BYTE*)srcImg.GetBits();
 		int srcBitsCount=srcImg.GetBPP();
@@ -462,31 +482,120 @@ void CMainFrame::downNeckGirth()
 		//目標影像參數
 		BYTE *destPtr=(BYTE*)destImg.GetBits();
 		int destPitch=destImg.GetPitch();
-		//讀取最高點高度
+		//複製影像數據
+		for(int i=0 ; i<height;i++)
+		{
+			memcpy( destPtr+i*destPitch, srcPtr+i*srcPitch, abs(srcPitch) );
+		} 
+		destImg.Save(path+"\\oriDownNeckGirth.bmp");
+		//找出前下頸點
+		//讀取前中心線
+		vector<Point> fCenterLine;
+		read.open(path+"\\FCenterL.asc");
+		if (read.is_open())
+		{
+			string line;
+			for (int i=0;i<height;i++)
+			{
+				std::getline(read,line);
+				vector<string> tokens;
+				istringstream iss(line);
+				copy(istream_iterator<string>(iss),
+					istream_iterator<string>(),
+					back_inserter<vector<string> >(tokens));
+				fCenterLine.push_back(Point(atof(tokens[0].c_str()),atof(tokens[1].c_str()),atof(tokens[2].c_str())));
+			}
+		}
 		read.close();
-		double maxZ;
+		//對前中心線X值做sobel
+		vector<double> sobelData;
+		for (int i=0;i<height;i++)
+		{
+			double sobelTemp=0;
+			for (int k=0;k<maskLength;k++)
+			{
+				int index = (height-(maskLength/2)+k+i)%height;
+				sobelTemp = sobelTemp + (sobelMask[k]*fCenterLine[index].getX());
+			}
+			sobelData.push_back(sobelTemp);
+		}
+		//前下頸點高度
+		for (int i=0;i<sobelData.size();i++)
+		{
+			if (sobelData[i]==0)
+				frontDownNeckZ = fCenterLine[i].getZ();
+		}
+		//輸出
+		//下頸點
+		destImg.SetPixel((width/2),maxZ - frontDownNeckZ,RGB(255,0,255));
+		destImg.Save(path+"\\oriDownNeckGirthWithZeroPoint.bmp");
+		//建立邊界像素群
+		vector<Point> leftSide,rightSide;
 		read.open(path+"\\Body.asc");
 		if (read.is_open())
 		{
 			string line;
-			std::getline(read,line);
-			//分割字串
-			vector<string> tokens;
-			istringstream iss(line);
-			copy(istream_iterator<string>(iss),
-				istream_iterator<string>(),
-				back_inserter<vector<string> >(tokens));
-			maxZ=atof(tokens[2].c_str());
+			while(std::getline(read,line))
+			{
+				vector<string> tokens;
+				istringstream iss(line);
+				copy(istream_iterator<string>(iss),
+					istream_iterator<string>(),
+					back_inserter<vector<string> >(tokens));
+				if((rightZ<leftZ && atoi(tokens[2].c_str())<=rightZ) || (leftZ<=rightZ && atoi(tokens[2].c_str())<=leftZ))
+					break;
+				else if (leftSide.empty() || rightSide.empty())
+				{
+					leftSide.push_back(Point(atoi(tokens[0].c_str()),atoi(tokens[1].c_str()),atoi(tokens[2].c_str())));
+					rightSide.push_back(Point(atoi(tokens[0].c_str()),atoi(tokens[1].c_str()),atoi(tokens[2].c_str())));
+				}
+				else if(atoi(tokens[2].c_str())!=(leftSide.back()).getZ() || atoi(tokens[2].c_str())!=(rightSide.back()).getZ())
+				{
+					leftSide.push_back(Point(atoi(tokens[0].c_str()),atoi(tokens[1].c_str()),atoi(tokens[2].c_str())));
+					rightSide.push_back(Point(atoi(tokens[0].c_str()),atoi(tokens[1].c_str()),atoi(tokens[2].c_str())));
+				}
+				else if(atoi(tokens[1].c_str())>=(leftSide.back()).getY())
+				{
+					leftSide.pop_back();
+					leftSide.push_back(Point(atoi(tokens[0].c_str()),atoi(tokens[1].c_str()),atoi(tokens[2].c_str())));
+					if(atoi(tokens[1].c_str())>=leftY)
+						leftY = atoi(tokens[1].c_str());
+				}
+				else if(atoi(tokens[1].c_str())<=(rightSide.back()).getY())
+				{
+					rightSide.pop_back();
+					rightSide.push_back(Point(atoi(tokens[0].c_str()),atoi(tokens[1].c_str()),atoi(tokens[2].c_str())));
+					if(atoi(tokens[1].c_str())<=rightY)
+						rightY = atoi(tokens[1].c_str());
+				}
+			}
 		}
 		read.close();
-		int offset = width*(maxZ-frontUpperNeckZ)*srcPitch;
-		//複製影像數據
-		for(int i=0 ; i<height;i++)
+		//左側頸點
+		Point leftNeckSide = Point(0,0,0);
+		Point rightNeckSide = Point(0,0,0);
+		double minArcTan = 1000;
+		for (int i=leftSide.size()-1;i>=10;i--)
 		{
-			memcpy( destPtr+i*destPitch, srcPtr+i*srcPitch+(offset), abs(srcPitch) );
-		} 
-		destImg.Save(path+"\\oriDownNeckGirth.bmp");
-		//找出前下頸點
+			double temp = atan2(abs(leftSide[i].getZ()-leftZ),abs(leftSide[i].getY()-leftY));
+			if (leftSide[i].getZ()>leftZ && temp < minArcTan)
+			{
+				minArcTan = temp;
+				leftNeckSide = Point(leftSide[i].getX(),leftSide[i].getY(),leftSide[i].getZ());
+			}
+		}
+		//右側頸點
+		minArcTan = 1000;
+		for (int i=rightSide.size()-1;i>=10;i--)
+		{
+			double temp = atan2(abs(rightSide[i].getZ()-rightZ),abs(rightY - rightSide[i].getY()));
+			if (rightSide[i].getZ() > rightZ && temp < minArcTan)
+			{
+				minArcTan = temp;
+				rightNeckSide = Point(rightSide[i].getX(),rightSide[i].getY(),rightSide[i].getZ());
+			}
+		}
+		AfxMessageBox("downNeckLine OK!!");
 	}
 }
 
