@@ -130,7 +130,7 @@ void CMainFrame::upperNeckGirth()
 		path = fd.GetPathName();
 		srcImg.Load(path);
 		path = fd.GetFolderPath();
-		//取出0.5~2h
+		//取出0~2h
 		width = srcImg.GetWidth();
 		height = srcImg.GetHeight();
 		height = (height*2/7);
@@ -451,10 +451,6 @@ void CMainFrame::downNeckGirth()
 			maxZ=atof(tokens[2].c_str());
 		}
 		read.close();
-		if (rightZ>leftZ)
-			height = maxZ - leftZ +10;
-		else
-			height = maxZ - rightZ +10;
 		//原始影像參數
 		BYTE* srcPtr=(BYTE*)srcImg.GetBits();
 		int srcBitsCount=srcImg.GetBPP();
@@ -488,6 +484,10 @@ void CMainFrame::downNeckGirth()
 			memcpy( destPtr+i*destPitch, srcPtr+i*srcPitch, abs(srcPitch) );
 		} 
 		destImg.Save(path+"\\oriDownNeckGirth.bmp");
+		if (rightZ>leftZ)
+			height = maxZ - leftZ +10;
+		else
+			height = maxZ - rightZ +10;
 		//找出前下頸點
 		//讀取前中心線
 		vector<Point> fCenterLine;
@@ -574,27 +574,145 @@ void CMainFrame::downNeckGirth()
 		//左側頸點
 		Point leftNeckSide = Point(0,0,0);
 		Point rightNeckSide = Point(0,0,0);
-		double minArcTan = 1000;
-		for (int i=leftSide.size()-1;i>=10;i--)
+		double maxBendingValue = 0;
+		int k=15;
+		/*for (int i=leftSide.size()-1;i>=10;i--)
 		{
-			double temp = atan2(abs(leftSide[i].getZ()-leftZ),abs(leftSide[i].getY()-leftY));
-			if (leftSide[i].getZ()>leftZ && temp < minArcTan)
+			double temp = (abs(leftSide[i].getZ()-(leftSide.back()).getZ()+0.0)/abs(leftSide[i].getY()-(leftSide.back()).getY()+0.0));
+			if (leftSide[i].getZ()>(leftSide.back()).getZ() && temp < minArcTan)
 			{
 				minArcTan = temp;
 				leftNeckSide = Point(leftSide[i].getX(),leftSide[i].getY(),leftSide[i].getZ());
 			}
-		}
-		//右側頸點
-		minArcTan = 1000;
-		for (int i=rightSide.size()-1;i>=10;i--)
+		}*/
+		k=leftSide.size()/8;
+		for (int i=leftSide.size()-1-k;i>=10+k;i--)
 		{
-			double temp = atan2(abs(rightSide[i].getZ()-rightZ),abs(rightY - rightSide[i].getY()));
-			if (rightSide[i].getZ() > rightZ && temp < minArcTan)
+			double x1 = leftSide[i+k].getY() - leftSide[i].getY();
+			double y1 = leftSide[i+k].getZ() - leftSide[i].getZ();
+			double x2 = leftSide[i-k].getY() - leftSide[i].getY();
+			double y2 = leftSide[i-k].getZ() - leftSide[i].getZ();
+			double xc = abs(x1+x2);
+			double yc = abs(y1+y2);
+			double temp = sqrt(xc*xc+yc*yc);
+			if( temp > maxBendingValue && leftSide[i].getZ() > frontDownNeckZ)
+			{
+				maxBendingValue = temp;
+				leftNeckSide = Point(leftSide[i].getX(),leftSide[i].getY(),leftSide[i].getZ());
+			}
+		}
+		/*int N = 15;
+		for (int i=N; i<leftSide.size()-N; i++ )
+		{
+			double x = 2*leftSide[i].getY() - leftSide[i-N].getY() - leftSide[i+N].getY();
+			double y = 2*leftSide[i].getZ() - leftSide[i-N].getZ() - leftSide[i+N].getZ();
+
+			double temp = sqrt( double(x*x + y*y) );
+			double sign = (leftSide[i-N].getY() - leftSide[i+N].getY())*y - (leftSide[i-N].getZ() - leftSide[i+N].getZ())*x;
+			if ( sign>0 && temp > maxBendingValue && leftSide[i].getZ() > frontDownNeckZ)
+			{
+				maxBendingValue = temp;
+				leftNeckSide = Point(leftSide[i].getX(),leftSide[i].getY(),leftSide[i].getZ());
+			}
+		}*/
+		//右側頸點
+		maxBendingValue = 0;
+		/*for (int i=rightSide.size()-1;i>=10;i--)
+		{
+			double temp = (abs(rightSide[i].getZ()-(rightSide.back()).getZ()+0.0)/abs((rightSide.back()).getY() - rightSide[i].getY()+0.0));
+			if (rightSide[i].getZ()>(rightSide.back()).getZ() && temp < minArcTan)
 			{
 				minArcTan = temp;
 				rightNeckSide = Point(rightSide[i].getX(),rightSide[i].getY(),rightSide[i].getZ());
 			}
+		}*/
+		k = rightSide.size()/8;
+		for (int i=rightSide.size()-10-k;i>=10+k;i--)
+		{
+			double x1 = rightSide[i+k].getY() - rightSide[i].getY();
+			double y1 = rightSide[i+k].getZ() - rightSide[i].getZ();
+			double x2 = rightSide[i-k].getY() - rightSide[i].getY();
+			double y2 = rightSide[i-k].getZ() - rightSide[i].getZ();
+			double xc = abs(x1+x2);
+			double yc = abs(y1+y2);
+			double temp = sqrt(xc*xc+yc*yc);
+			if( temp > maxBendingValue && rightSide[i].getZ() > frontDownNeckZ)
+			{
+				maxBendingValue = temp;
+				rightNeckSide = Point(rightSide[i].getX(),rightSide[i].getY(),rightSide[i].getZ());
+			}
 		}
+		/*for (int i=N; i<rightSide.size()-N; i++ )
+		{
+			double x = 2*rightSide[i].getY() - rightSide[i-N].getY() - rightSide[i+N].getY();
+			double y = 2*rightSide[i].getZ() - rightSide[i-N].getZ() - rightSide[i+N].getZ();
+
+			double temp = sqrt( double(x*x + y*y) );
+			double sign = (rightSide[i-N].getY() - rightSide[i+N].getY())*y - (rightSide[i-N].getZ() - rightSide[i+N].getZ())*x;
+			if ( sign>0 && temp > maxBendingValue && rightSide[i].getZ() > frontDownNeckZ)
+			{
+				maxBendingValue = temp;
+				rightNeckSide = Point(rightSide[i].getX(),rightSide[i].getY(),rightSide[i].getZ());
+			}
+		}*/
+		//輸出
+		//邊界點
+		/*for (int i=0;i<leftSide.size();i++)
+			destImg.SetPixel(leftSide[i].getY()+(width/2),maxZ - leftSide[i].getZ(),RGB(255,255,0));
+		for (int i=0;i<rightSide.size();i++)
+			destImg.SetPixel(rightSide[i].getY()+(width/2),maxZ - rightSide[i].getZ(),RGB(255,255,0));
+		destImg.SetPixel(leftNeckSide.getY()+(width/2),maxZ - leftNeckSide.getZ(),RGB(255,0,255));
+		destImg.SetPixel(rightNeckSide.getY()+(width/2),maxZ - rightNeckSide.getZ(),RGB(255,0,255));*/
+		////側頸點
+		destImg.SetPixel((width*3/4),maxZ - leftNeckSide.getZ(),RGB(255,0,255));
+		destImg.SetPixel((width/4),maxZ - rightNeckSide.getZ(),RGB(255,0,255));
+		//sine curve fitting
+		double **cof = new double *[2];
+		for (int i=0;i<2;i++)
+			cof[i] = new double[1];
+
+		double **xData = new double *[4];
+		for (int i=0;i<4;i++)
+			xData[i] = new double[2];
+
+		double **yData = new double *[4];
+		for (int i=0;i<4;i++)
+			yData[i] = new double[1];
+
+		xData[0][0] = sin((width/4)*3.1415926*2/(width*3/4));
+		xData[0][1] = 1;
+		yData[0][0] = rightNeckSide.getZ();
+
+		xData[1][0] = sin((width/2)*3.1415926*2/(width*3/4));
+		xData[1][1] = 1;
+		yData[1][0] = frontDownNeckZ;
+
+		xData[2][0] = sin((width/4)*3.1415926*2/(width*3/4))*sin((width/4)*3.1415926*2/(width*3/4));
+		xData[2][1] = sin((width/4)*3.1415926*2/(width*3/4));
+		yData[2][0] = rightNeckSide.getZ()*sin(((width/4)*3.1415926*2/(width*3/4)));
+
+		xData[3][0] = sin((width/2)*3.1415926*2/(width*3/4))*sin((width/2)*3.1415926*2/(width*3/4));
+		xData[3][1] = sin((width/2)*3.1415926*2/(width*3/4));
+		yData[3][0] = frontDownNeckZ*sin(((width/2)*3.1415926*2/(width*3/4)));
+
+		matrixA B2(4,1,yData);
+		matrixA A2(4,2,xData);
+		matrixA C2(2,1,0.0);
+
+		C2 = A2.PseudoInverse()*B2;
+		double a0 = C2.arr[0][0];
+		double a1 = C2.arr[1][0];
+		vector<Point> firstFit;
+		for(int i=0;i<width/2;i++)
+		{
+			int y = a0 * sin(i*3.1415926*2/(width*3/4)) +a1;
+			firstFit.push_back(Point(i,y,0));
+		}
+		for(int i=0;i<firstFit.size();i++)
+		{
+			destImg.SetPixel(firstFit[i].getX(),maxZ - firstFit[i].getY(),RGB(0,255,255));
+		}
+		destImg.Save(path+"\\oriDownNeckGirthWithSidePoint.bmp");
 		AfxMessageBox("downNeckLine OK!!");
 	}
 }
