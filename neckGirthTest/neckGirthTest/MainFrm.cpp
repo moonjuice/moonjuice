@@ -664,10 +664,10 @@ void CMainFrame::downNeckGirth()
 		destImg.SetPixel(leftNeckSide.getY()+(width/2),maxZ - leftNeckSide.getZ(),RGB(255,0,255));
 		destImg.SetPixel(rightNeckSide.getY()+(width/2),maxZ - rightNeckSide.getZ(),RGB(255,0,255));*/
 		////°¼ÀVÂI
-		destImg.SetPixel((width*3/4),maxZ - leftNeckSide.getZ(),RGB(255,0,255));
-		destImg.SetPixel((width/4),maxZ - rightNeckSide.getZ(),RGB(255,0,255));
+		destImg.SetPixel((width/2)+abs(leftNeckSide.getY() - fCenterLine[0].getY()),maxZ - leftNeckSide.getZ(),RGB(255,0,255));
+		destImg.SetPixel((width/2)+abs(rightNeckSide.getY() - fCenterLine[0].getY()),maxZ - rightNeckSide.getZ(),RGB(255,0,255));
 		//sine curve fitting
-		double **cof = new double *[2];
+		/*double **cof = new double *[2];
 		for (int i=0;i<2;i++)
 			cof[i] = new double[1];
 
@@ -711,7 +711,7 @@ void CMainFrame::downNeckGirth()
 		for(int i=0;i<firstFit.size();i++)
 		{
 			destImg.SetPixel(firstFit[i].getX(),maxZ - firstFit[i].getY(),RGB(0,255,255));
-		}
+		}*/
 		destImg.Save(path+"\\oriDownNeckGirthWithSidePoint.bmp");
 		AfxMessageBox("downNeckLine OK!!");
 	}
