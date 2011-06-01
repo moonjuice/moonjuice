@@ -664,8 +664,12 @@ void CMainFrame::downNeckGirth()
 		destImg.SetPixel(leftNeckSide.getY()+(width/2),maxZ - leftNeckSide.getZ(),RGB(255,0,255));
 		destImg.SetPixel(rightNeckSide.getY()+(width/2),maxZ - rightNeckSide.getZ(),RGB(255,0,255));*/
 		////°¼ÀVÂI
-		destImg.SetPixel((width/2)+abs(leftNeckSide.getY() - fCenterLine[0].getY()),maxZ - leftNeckSide.getZ(),RGB(255,0,255));
-		destImg.SetPixel((width/2)+abs(rightNeckSide.getY() - fCenterLine[0].getY()),maxZ - rightNeckSide.getZ(),RGB(255,0,255));
+		/*destImg.SetPixel((width/2)+leftNeckSide.getY() - fCenterLine[0].getY(),maxZ - leftNeckSide.getZ(),RGB(255,0,255));
+		destImg.SetPixel((width/2)+rightNeckSide.getY() - fCenterLine[0].getY(),maxZ - rightNeckSide.getZ(),RGB(255,0,255));*/
+		/*destImg.SetPixel((width*5/6),maxZ - leftNeckSide.getZ(),RGB(255,0,255));
+		destImg.SetPixel((width/6),maxZ - rightNeckSide.getZ(),RGB(255,0,255));*/
+		destImg.SetPixel((width*3/4),maxZ - leftNeckSide.getZ(),RGB(255,0,255));
+		destImg.SetPixel((width/4),maxZ - rightNeckSide.getZ(),RGB(255,0,255));
 		//sine curve fitting
 		/*double **cof = new double *[2];
 		for (int i=0;i<2;i++)
@@ -712,6 +716,52 @@ void CMainFrame::downNeckGirth()
 		{
 			destImg.SetPixel(firstFit[i].getX(),maxZ - firstFit[i].getY(),RGB(0,255,255));
 		}*/
+		//cosine curve
+		double **cof = new double *[2];
+		for (int i=0;i<2;i++)
+			cof[i] = new double[1];
+
+		double **xData = new double *[4];
+		for (int i=0;i<4;i++)
+			xData[i] = new double[2];
+
+		double **yData = new double *[4];
+		for (int i=0;i<4;i++)
+			yData[i] = new double[1];
+
+		xData[0][0] = cos((width/4)*3.1415926*2/(width/2));
+		xData[0][1] = 1;
+		yData[0][0] = rightNeckSide.getZ();
+
+		xData[1][0] = cos((width/2)*3.1415926*2/(width/2));
+		xData[1][1] = 1;
+		yData[1][0] = frontDownNeckZ;
+
+		xData[2][0] = cos((width/4)*3.1415926*2/(width/2))*cos((width/4)*3.1415926*2/(width/2));
+		xData[2][1] = cos((width/4)*3.1415926*2/(width/2));
+		yData[2][0] = rightNeckSide.getZ()*cos(((width/4)*3.1415926*2/(width/2)));
+
+		xData[3][0] = cos((width/2)*3.1415926*2/(width/2))*cos((width/2)*3.1415926*2/(width/2));
+		xData[3][1] = cos((width/2)*3.1415926*2/(width/2));
+		yData[3][0] = frontDownNeckZ*cos(((width/2)*3.1415926*2/(width/2)));
+
+		matrixA B2(4,1,yData);
+		matrixA A2(4,2,xData);
+		matrixA C2(2,1,0.0);
+
+		C2 = A2.PseudoInverse()*B2;
+		double a0 = C2.arr[0][0];
+		double a1 = C2.arr[1][0];
+		vector<Point> firstFit;
+		for(int i=0;i<width/2;i++)
+		{
+			int y = a0 * cos(i*3.1415926*2/(width/2)) +a1;
+			firstFit.push_back(Point(i,y,0));
+		}
+		for(int i=0;i<firstFit.size();i++)
+		{
+			destImg.SetPixel(firstFit[i].getX(),maxZ - firstFit[i].getY(),RGB(0,255,255));
+		}
 		destImg.Save(path+"\\oriDownNeckGirthWithSidePoint.bmp");
 		AfxMessageBox("downNeckLine OK!!");
 	}
