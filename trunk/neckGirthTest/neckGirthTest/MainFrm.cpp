@@ -403,7 +403,7 @@ void CMainFrame::downNeckGirth()
 		path = fd.GetPathName();
 		srcImg.Load(path);
 		path = fd.GetFolderPath();
-		//取得肩部部分(前上頸點~肩端點最低高度+10)
+		//取得肩部部分(前上頸點~肩端點最高點高度)
 		ifstream read;
 		double leftY,leftZ,rightY,rightZ;//左右肩端點高度
 		read.open(path+"\\CutResult.asc");
@@ -485,9 +485,9 @@ void CMainFrame::downNeckGirth()
 		} 
 		destImg.Save(path+"\\oriDownNeckGirth.bmp");
 		if (rightZ>leftZ)
-			height = maxZ - leftZ +10;
+			height = maxZ - rightZ;
 		else
-			height = maxZ - rightZ +10;
+			height = maxZ - leftZ;
 		//找出前下頸點
 		//讀取前中心線
 		vector<Point> fCenterLine;
@@ -525,10 +525,6 @@ void CMainFrame::downNeckGirth()
 			if (sobelData[i]==0)
 				frontDownNeckZ = fCenterLine[i].getZ();
 		}
-		//輸出
-		//下頸點
-		destImg.SetPixel((width/2),maxZ - frontDownNeckZ,RGB(255,0,255));
-		destImg.Save(path+"\\oriDownNeckGirthWithZeroPoint.bmp");
 		//建立邊界像素群
 		vector<Point> leftSide,rightSide;
 		read.open(path+"\\Body.asc");
@@ -654,22 +650,10 @@ void CMainFrame::downNeckGirth()
 				maxBendingValue = temp;
 				rightNeckSide = Point(rightSide[i].getX(),rightSide[i].getY(),rightSide[i].getZ());
 			}
-		}*/
-		//輸出
-		//邊界點
-		/*for (int i=0;i<leftSide.size();i++)
-			destImg.SetPixel(leftSide[i].getY()+(width/2),maxZ - leftSide[i].getZ(),RGB(255,255,0));
-		for (int i=0;i<rightSide.size();i++)
-			destImg.SetPixel(rightSide[i].getY()+(width/2),maxZ - rightSide[i].getZ(),RGB(255,255,0));
-		destImg.SetPixel(leftNeckSide.getY()+(width/2),maxZ - leftNeckSide.getZ(),RGB(255,0,255));
-		destImg.SetPixel(rightNeckSide.getY()+(width/2),maxZ - rightNeckSide.getZ(),RGB(255,0,255));*/
-		////側頸點
-		/*destImg.SetPixel((width/2)+leftNeckSide.getY() - fCenterLine[0].getY(),maxZ - leftNeckSide.getZ(),RGB(255,0,255));
-		destImg.SetPixel((width/2)+rightNeckSide.getY() - fCenterLine[0].getY(),maxZ - rightNeckSide.getZ(),RGB(255,0,255));*/
-		/*destImg.SetPixel((width*5/6),maxZ - leftNeckSide.getZ(),RGB(255,0,255));
-		destImg.SetPixel((width/6),maxZ - rightNeckSide.getZ(),RGB(255,0,255));*/
-		destImg.SetPixel((width*3/4),maxZ - leftNeckSide.getZ(),RGB(255,0,255));
-		destImg.SetPixel((width/4),maxZ - rightNeckSide.getZ(),RGB(255,0,255));
+		}*/	
+		//計算側頸點在圖片的位置
+		double left = abs(atan2((leftNeckSide.getY() - fCenterLine[0].getY()),leftNeckSide.getX()+0.0)*180/3.1415926)/360*width;
+		double right = abs(atan2((rightNeckSide.getY() - fCenterLine[0].getY()),rightNeckSide.getX()+0.0)*180/3.1415926)/360*width;
 		//sine curve fitting
 		/*double **cof = new double *[2];
 		for (int i=0;i<2;i++)
@@ -729,39 +713,103 @@ void CMainFrame::downNeckGirth()
 		for (int i=0;i<4;i++)
 			yData[i] = new double[1];
 
-		xData[0][0] = cos((width/4)*3.1415926*2/(width/2));
+		xData[0][0] = cos((right)*3.1415926*2/(width));
 		xData[0][1] = 1;
 		yData[0][0] = rightNeckSide.getZ();
 
-		xData[1][0] = cos((width/2)*3.1415926*2/(width/2));
+		xData[1][0] = cos((width/2)*3.1415926*2/(width));
 		xData[1][1] = 1;
 		yData[1][0] = frontDownNeckZ;
 
-		xData[2][0] = cos((width/4)*3.1415926*2/(width/2))*cos((width/4)*3.1415926*2/(width/2));
-		xData[2][1] = cos((width/4)*3.1415926*2/(width/2));
-		yData[2][0] = rightNeckSide.getZ()*cos(((width/4)*3.1415926*2/(width/2)));
+		xData[2][0] = cos((right)*3.1415926*2/(width))*cos((right)*3.1415926*2/(width));
+		xData[2][1] = cos((right)*3.1415926*2/(width));
+		yData[2][0] = rightNeckSide.getZ()*cos(((right)*3.1415926*2/(width)));
 
-		xData[3][0] = cos((width/2)*3.1415926*2/(width/2))*cos((width/2)*3.1415926*2/(width/2));
-		xData[3][1] = cos((width/2)*3.1415926*2/(width/2));
-		yData[3][0] = frontDownNeckZ*cos(((width/2)*3.1415926*2/(width/2)));
+		xData[3][0] = cos((width/2)*3.1415926*2/(width))*cos((width/2)*3.1415926*2/(width));
+		xData[3][1] = cos((width/2)*3.1415926*2/(width));
+		yData[3][0] = frontDownNeckZ*cos(((width/2)*3.1415926*2/(width)));
+
+		matrixA B(4,1,yData);
+		matrixA A(4,2,xData);
+		matrixA C(2,1,0.0);
+
+		C = A.PseudoInverse()*B;
+		double a0 = C.arr[0][0];
+		double a1 = C.arr[1][0];
+		vector<Point> firstRightFit;
+		for(int i=0;i<width/2;i++)
+		{
+			int y = a0 * cos(i*3.1415926*2/(width)) +a1;
+			firstRightFit.push_back(Point(i,y,0));
+		}
+
+		//firstLeftFit
+		xData[0][0] = cos((width/2)*3.1415926*2/(width));
+		xData[0][1] = 1;
+		yData[0][0] = frontDownNeckZ;
+
+		xData[1][0] = cos((left)*3.1415926*2/(width));
+		xData[1][1] = 1;
+		yData[1][0] = leftNeckSide.getZ();
+
+		xData[2][0] = cos((width/2)*3.1415926*2/(width))*cos((width/2)*3.1415926*2/(width));
+		xData[2][1] = cos((width/2)*3.1415926*2/(width));
+		yData[2][0] = frontDownNeckZ*cos(((width/2)*3.1415926*2/(width)));
+
+		xData[3][0] = cos((left)*3.1415926*2/(width))*cos((left)*3.1415926*2/(width));
+		xData[3][1] = cos((left)*3.1415926*2/(width));
+		yData[3][0] = leftNeckSide.getZ()*cos(((left)*3.1415926*2/(width)));
 
 		matrixA B2(4,1,yData);
 		matrixA A2(4,2,xData);
 		matrixA C2(2,1,0.0);
 
 		C2 = A2.PseudoInverse()*B2;
-		double a0 = C2.arr[0][0];
-		double a1 = C2.arr[1][0];
-		vector<Point> firstFit;
-		for(int i=0;i<width/2;i++)
+		a0 = C2.arr[0][0];
+		a1 = C2.arr[1][0];
+		vector<Point> firstLeftFit;
+		for(int i=width/2;i<width;i++)
 		{
-			int y = a0 * cos(i*3.1415926*2/(width/2)) +a1;
-			firstFit.push_back(Point(i,y,0));
+			int y = a0 * cos(i*3.1415926*2/(width)) +a1;
+			firstLeftFit.push_back(Point(i,y,0));
 		}
-		for(int i=0;i<firstFit.size();i++)
+		//找出後下頸點
+		Point p1 = firstRightFit[0];
+		Point p2 = firstLeftFit[firstLeftFit.size()-1];
+		double maxNeckZ,minNeckZ;
+		if (p1.getZ()>=p2.getZ())
 		{
-			destImg.SetPixel(firstFit[i].getX(),maxZ - firstFit[i].getY(),RGB(0,255,255));
+			maxNeckZ = p1.getZ();
+			minNeckZ = p2.getZ();
 		}
+		else
+		{
+			maxNeckZ = p2.getZ();
+			minNeckZ = p1.getZ();
+		}
+		int laplace[7] = {-1,-1,-1,6,1,1,1};
+
+		//輸出
+		//邊界點
+		/*for (int i=0;i<leftSide.size();i++)
+			destImg.SetPixel(leftSide[i].getY()+(width/2),maxZ - leftSide[i].getZ(),RGB(255,255,0));
+		for (int i=0;i<rightSide.size();i++)
+			destImg.SetPixel(rightSide[i].getY()+(width/2),maxZ - rightSide[i].getZ(),RGB(255,255,0));*/
+		//擬合線
+		for(int i=0;i<firstRightFit.size();i++)
+		{
+			destImg.SetPixel(firstRightFit[i].getX(),maxZ - firstRightFit[i].getY(),RGB(0,255,255));
+		}
+		for(int i=0;i<firstLeftFit.size();i++)
+		{
+			destImg.SetPixel(firstLeftFit[i].getX(),maxZ - firstLeftFit[i].getY(),RGB(0,255,255));
+		}
+		//輸出
+		//下頸點
+		destImg.SetPixel((width/2),maxZ - frontDownNeckZ,RGB(255,0,255));
+		//側頸點	
+		destImg.SetPixel(width-left,maxZ - leftNeckSide.getZ(),RGB(255,0,255));
+		destImg.SetPixel(right,maxZ - rightNeckSide.getZ(),RGB(255,0,255));
 		destImg.Save(path+"\\oriDownNeckGirthWithSidePoint.bmp");
 		AfxMessageBox("downNeckLine OK!!");
 	}
