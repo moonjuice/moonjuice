@@ -777,18 +777,30 @@ void CMainFrame::downNeckGirth()
 		Point p1 = firstRightFit[0];
 		Point p2 = firstLeftFit[firstLeftFit.size()-1];
 		double maxNeckZ,minNeckZ;
-		if (p1.getZ()>=p2.getZ())
+		if (p1.getY()>=p2.getY())
 		{
-			maxNeckZ = p1.getZ();
-			minNeckZ = p2.getZ();
+			maxNeckZ = p1.getY()+10;
+			minNeckZ = p2.getY()-10;
 		}
 		else
 		{
-			maxNeckZ = p2.getZ();
-			minNeckZ = p1.getZ();
+			maxNeckZ = p2.getY()+10;
+			minNeckZ = p1.getY()-10;
 		}
-		int laplace[7] = {-1,-1,-1,6,1,1,1};
-
+		int laplaceMask[7] = {-1,-1,-1,6,1,1,1};
+		vector<double> laplace;
+		for (int i=(maxZ-maxNeckZ);i<=(maxZ-minNeckZ);i++)
+		{
+			double temp=0;
+			for (int j=0;j<7;j++)
+			{
+				double r = GetRValue(destImg.GetPixel(0,i));
+				double g = GetGValue(destImg.GetPixel(0,i));
+				double b = GetBValue(destImg.GetPixel(0,i));
+				temp = temp + (laplaceMask[j] * (r+g+b)/3);
+			}
+			laplace.push_back(temp);
+		}
 		//輸出
 		//邊界點
 		/*for (int i=0;i<leftSide.size();i++)
