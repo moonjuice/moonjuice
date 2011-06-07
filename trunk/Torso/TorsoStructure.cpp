@@ -19,6 +19,7 @@
 #include <Nurbs.h>
 #include <direct.h>
 #include <fstream>
+#include <sstream>
 //#include <cstdio>
 // CTorsoStructure
 
@@ -7680,16 +7681,18 @@ int CTorsoStructure::FillMesh( CPoint& Lower, CPoint& Upper, int Type, int Img )
 }
 
 //TODO : newUpperNeckLine 註解尚未寫
-/**@brief 
+/**@brief 尋找上頸圍線
  *
+ * 詳細流程參考陳治評論文
  */
 void CTorsoStructure::newUpperNeckLine()
 {
+	m_fZFrontLowerNeck = m_pLayer[0].m_CG(2)*5.5/7.;
 	CImage srcImg,destImg;
 	int sobelMask[11] = {-1,-1,-1,-1,-1,0,1,1,1,1,1};
 	int maskLength = 11;
 	//讀取身體圖片
-	srcImg.Load(m_strFilePath+"\\test.bmp");
+	srcImg.Load(m_strFilePath+"test.jpg");
 	//取出0~2/7
 	int width = srcImg.GetWidth();
 	int height = srcImg.GetHeight();
@@ -7726,7 +7729,7 @@ void CTorsoStructure::newUpperNeckLine()
 	{
 		memcpy( destPtr+i*destPitch, srcPtr+i*srcPitch, abs(srcPitch) );
 	} 
-	destImg.Save(m_strFilePath+"\\oriUpperNeckGirth.bmp");
+	destImg.Save(m_strFilePath+"oriUpperNeckGirth.bmp");
 	//初始化陣列
 	int **destData = (int **)malloc(width * sizeof(void *));
 	for(int y = 0; y != width; ++y)
@@ -7879,7 +7882,7 @@ void CTorsoStructure::newUpperNeckLine()
 	//讀取最高點高度
 	ifstream read;
 	double maxZ;
-	read.open(m_strFilePath+"\\Body.asc");
+	read.open(m_strFilePath+"Body.asc");
 	if (read.is_open())
 	{
 		string line;
@@ -7920,6 +7923,58 @@ void CTorsoStructure::newUpperNeckLine()
 	//{
 	//	secondFit[i].setY(secondFit[i].getY() - offset);
 	//}
+	m_pUpperNeck.resize(720);
+
+	for (int i=0; i<720; i++ )
+	{
+		int u, v;
+		Upper[i] = v;
+		m_pUpperNeck[i].u = secondFit[i].getX();
+		m_pUpperNeck[i].v = secondFit[i].getY();
+		To3D(secondFit[i].getX(),secondFit[i].getY(),m_pUpperNeck[i].Pos);
+		m_pImageDisp->SetPixel( i, v, RGB(255,255,255) );
+	}
+
+
+// 	m_fZFrontUpperNeck = m_pLayer[0].m_CG(2) - Upper[Center];
+// 	m_fZBackUpperNeck = m_pLayer[0].m_CG(2) - Upper[0];
+	m_Grid[40][63].Pos = m_pUpperNeck[0].Pos;;
+	m_Grid[40][63].u=0;	
+	m_Grid[40][63].v = secondFit[0].getY();
+
+	m_Grid[0][63].Pos = m_pUpperNeck[360].Pos;
+	m_Grid[0][63].u = 360;	
+	m_Grid[0][63].v = secondFit[360].getY();
+	//	輸出 UpperNeckScanL.asc file
+	CStdioFile UpperNeckFile( "UpperNeckScanL.asc", CFile::modeCreate|CFile::modeWrite );
+
+	double Max =-1e10; 
+	double Min = 1e10;
+	for (int i=0; i<720; i++ )
+	{	
+		//m_pUpperNeck[i].u = i;
+		//m_pUpperNeck[i].v = Upper[i];
+		//To3Df( m_pUpperNeck[i].u, Upper[i], m_pUpperNeck[i].Pos );
+
+		if ( Max<m_pUpperNeck[i](1) )
+		{
+			Max = m_pUpperNeck[i](1);
+			m_Grid[5][63] = m_Grid[35][63] = m_pUpperNeck[i];
+
+		}
+		if ( Min>m_pUpperNeck[i](1) )
+		{
+			Min = m_pUpperNeck[i](1);
+			m_Grid[45][63] = m_Grid[75][63] = m_pUpperNeck[i];
+		}
+		WriteStr( UpperNeckFile, m_pUpperNeck[i].Pos );
+	}
+	To2D( m_Grid[5][63].u, m_Grid[5][63].v, m_Grid[5][63].Pos );
+	To2D( m_Grid[35][63].u, m_Grid[35][63].v, m_Grid[35][63].Pos );
+	To2D( m_Grid[45][63].u, m_Grid[45][63].v, m_Grid[45][63].Pos );
+	To2D( m_Grid[75][63].u, m_Grid[75][63].v, m_Grid[75][63].Pos );
+
+	UpperNeckFile.Close();
 	//輸出圖檔
 	//過零點
 	for (int i=0;i<zeroPoint.size();i++)
@@ -7931,7 +7986,7 @@ void CTorsoStructure::newUpperNeckLine()
 	{
 		srcImg.SetPixel(secondFit[i].getX(),secondFit[i].getY(),RGB(0,255,255));
 	}
-	srcImg.Save(m_strFilePath+"\\testUpperNeckGirthFinal.bmp");
+	srcImg.Save(m_strFilePath+"testUpperNeckGirthFinal.bmp");
 	
 	AfxMessageBox("upperNeckGirth OK!!");
 	for(int y = 0; y != zeroPoint.size()*2; ++y)
