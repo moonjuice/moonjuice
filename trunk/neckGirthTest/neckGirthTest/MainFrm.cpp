@@ -801,6 +801,15 @@ void CMainFrame::downNeckGirth()
 			}
 			laplace.push_back(temp);
 		}
+		double maxLaplaceValue = 0;
+		Point backDownNeck(0,0,0);
+		for (int i=0;i<laplace.size();i++)
+		{
+			if (laplace[i]>maxLaplaceValue)
+			{
+				backDownNeck = Point(0,0,maxZ-maxNeckZ+i);
+			}
+		}
 		//輸出
 		//邊界點
 		/*for (int i=0;i<leftSide.size();i++)
@@ -819,6 +828,7 @@ void CMainFrame::downNeckGirth()
 		//輸出
 		//下頸點
 		destImg.SetPixel((width/2),maxZ - frontDownNeckZ,RGB(255,0,255));
+		destImg.SetPixel(0,backDownNeck.getZ(),RGB(255,0,255));
 		//側頸點	
 		destImg.SetPixel(width-left,maxZ - leftNeckSide.getZ(),RGB(255,0,255));
 		destImg.SetPixel(right,maxZ - rightNeckSide.getZ(),RGB(255,0,255));
