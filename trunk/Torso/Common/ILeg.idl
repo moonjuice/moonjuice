@@ -1,0 +1,35 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+[ object, uuid (143DD5A4-FECE-4903-B7A6-701496948140), pointer_default(unique) ]
+interface ILeg : IUnknown
+{
+	HRESULT SetData( [in, string] char *pStr );
+	HRESULT Begin();
+	//HRESULT ProvisionalLandmark( [in,out] int *n, [in, out, size_is(*n)] point *pArray );
+};
+
+[ object, uuid (58e799f0-b131-11dd-ad8b-0800200c9a66), pointer_default(unique) ]
+interface ISPlam : IUnknown
+{
+	HRESULT SetData( [in, string] char *pStr );
+	HRESULT Begin();
+	//HRESULT ProvisionalLandmark( [in,out] int *n, [in, out, size_is(*n)] point *pArray );
+};
+
+[ object, uuid (58e799f1-b131-11dd-ad8b-0800200c9a66), pointer_default(unique) ]
+interface ISFoot : IUnknown
+{
+	HRESULT SetData( [in, string] char *pStr );
+	HRESULT Begin();
+	//HRESULT ProvisionalLandmark( [in,out] int *n, [in, out, size_is(*n)] point *pArray );
+};
+
+
+[ uuid( 9C2FEDF7-0C65-483a-953E-3E68FEA318CB ) ]
+coclass LegStructure
+{
+	interface ILeg;
+	interface ISPlam;
+	interface ISFoot;
+};

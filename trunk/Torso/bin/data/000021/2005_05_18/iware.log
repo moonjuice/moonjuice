@@ -1,0 +1,88 @@
+Surfacer V8.5 (Oct 12 1998) log file 
+Current directory: "D:\ANNA_01\½²¬±°o\2005_05_18"
+License ID string: 00000-D093CC20-1-jan-0
+Using message file: "C:\Program Files\Imageware\Surfacer 8.5\iware.msg"
+Using menu file "C:\Program Files\Imageware\Surfacer 8.5\surfacer.mnu"
+Your Imageware license expires in -12920 days 
+Pixel format flags:
+  nSize:           40
+  nVersion:        1
+  dwFlags:
+          PFD_DOUBLEBUFFER: YES
+                PFD_STEREO:  NO
+        PFD_DRAW_TO_WINDOW: YES
+        PFD_DRAW_TO_BITMAP:  NO
+           PFD_SUPPORT_GDI:  NO
+        PFD_SUPPORT_OPENGL: YES
+        PFD_GENERIC_FORMAT: YES
+          PFD_NEED_PALETTE:  NO
+   PFD_NEED_SYSTEM_PALETTE:  NO
+         PFD_SWAP_EXCHANGE:  NO
+             PFD_SWAP_COPY: YES
+    PFD_SWAP_LAYER_BUFFERS:  NO
+   PFD_GENERIC_ACCELERATED:  NO
+  iPixelType:      PFD_TYPE_RGBA
+  cColorBits:      16
+  cRedBits:        5
+  cRedShift:       11
+  cGreenBits:      6
+  cGreenShift:     5
+  cBlueBits:       5
+  cBlueShift:      0
+  cAlphaBits:      0
+  cAlphaShift:     0
+  cAccumBits:      32
+  cAccumRedBits:   11
+  cAccumGreenBits: 11
+  cAccumBlueBits:  10
+  cAccumAlphaBits: 0
+  cDepthBits:      16
+  cStencilBits:    8
+  cAuxBuffers:     0
+  iLayerType:      PFD_MAIN_PLANE
+  bReserved:       0
+  dwLayerMask:     0x00000000
+  dwVisibleMask:   0x00000000
+  dwDamageMask:    0x00000000
+Using Material Properties file "C:\Program Files\Imageware\Surfacer 8.5\iware.mpd"
+Device Capabilities: DISPLAY
+HORZSIZE     Width in millimeters:           320
+VERTSIZE     Height in millimeters:          240
+HORZRES      Width in pixels:               1024
+VERTRES      Height in raster lines:         768
+BITSPIXEL    Color bits per pixel:            16
+PLANES       Number of color planes:           1
+NUMBRUSHES   Number of device brushes:        -1
+NUMPENS      Number of device pens:           -1
+NUMMARKERS   Number of device markers:         0
+NUMFONTS     Number of device fonts:           0
+NUMCOLORS    Number of device colors:         -1
+PDEVICESIZE  Size of device structure:         0
+ASPECTX      Relative width of pixel:         36
+ASPECTY      Relative height of pixel:        36
+ASPECTXY     Relative diagonal of pixel:      51
+LOGPIXELSX   Horizontal dots per inch:        96
+LOGPIXELSY   Vertical dots per inch:          96
+SIZEPALETTE  Number of palette entries:        0
+NUMRESERVED  Reserved palette entries:        20
+COLORRES     Actual color resolution:         24
+
+DRIVERVERSION:          4000H
+TECHNOLOGY:             DT_RASDISPLAY (Raster display)          
+
+CLIPCAPS (Clipping capabilities)
+CP_RECTANGLE    Can Clip To Rectangle:       Yes
+
+RASTERCAPS (Raster capabilities)
+RC_BITBLT       Capable of simple BitBlt:    Yes
+RC_BANDING      Requires banding support:     No
+RC_SCALING      Requires scaling support:     No
+RC_BITMAP64     Supports bitmaps >64K:       Yes
+RC_GDI20_OUTPUT Has 2.0 output calls:        Yes
+RC_DI_BITMAP    Supports DIB to memory:      Yes
+RC_PALETTE      Supports a palette:           No
+RC_DIBTODEV     Supports bitmap conversion:  Yes
+RC_BIGFONT      Supports fonts >64K:         Yes
+RC_STRETCHBLT   Supports StretchBlt:         Yes
+RC_FLOODFILL    Supports FloodFill:          Yes
+RC_STRETCHDIB   Supports StretchDIBits:      Yes

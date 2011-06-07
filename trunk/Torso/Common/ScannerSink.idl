@@ -1,0 +1,12 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+
+[ object, uuid (6BA1B752-83D5-4638-B49E-0483993340C9) ]
+interface IScannerSink : IUnknown
+{
+	HRESULT ScannerReady( );
+	HRESULT ScanFinished();
+	HRESULT Status( [in] int len, [in, size_is(len)] char *pMsg );
+};
+

@@ -1,0 +1,19 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+
+
+[ object, uuid (606EB05F-DD77-4a72-974C-3F81AE5BCEB1) ]
+interface IArm : IUnknown
+{
+	HRESULT SetData( [in, out, string] char *pStr );
+	HRESULT LeftArm();
+	HRESULT RightArm();
+
+};
+
+[ uuid( C172DC20-FC2C-4d1f-A201-75693F408DF1 ) ]
+coclass ArmStructure
+{
+	interface IArm;
+}
