@@ -1,0 +1,26 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+typedef struct point
+{
+	float x, y, z;
+} point;
+
+[ object, uuid (6F595650-6917-419e-96D3-B0E63D456155), pointer_default(unique) ]
+interface ISegment : IUnknown
+{
+	HRESULT BeginSegment( [in, out, string] char *pPath ,[in, out, string] char *pName);
+	//HRESULT ProvisionalLandmark( [in,out] int *n, [in, out, size_is(*n)] point *pArray );
+};
+
+[ object, uuid (3B9E46FC-29F3-49ce-8191-9D632CA01740) ]
+interface ISegmentSink : IUnknown
+{
+	HRESULT NotifyReady( );
+};
+
+[ uuid( B11A11E9-9A5E-4767-BAA3-302F1D8E0C9C ) ]
+coclass Segmentation
+{
+	interface ISegment;
+};

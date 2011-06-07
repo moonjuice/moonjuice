@@ -1,0 +1,25 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+[ object, uuid (85F15315-B483-47bf-B4E8-C360661B0EB1) ]
+interface IScanner : IUnknown
+{
+	HRESULT StartUp();
+	HRESULT BeginScanning( [in] int nPathLen, [in, size_is(nPathLen)] char *pPath, [in] float Lower, [in] float Upper, [in, defaultvalue(2.0)] float Pitch );
+	HRESULT HomePosition();
+	HRESULT IsReady( [out] char* pbReady );
+};
+
+[ object, uuid (6BA1B752-83D5-4638-B49E-0483993340C9) ]
+interface IScannerSink : IUnknown
+{
+	HRESULT ScannerReady( );
+	HRESULT ScanFinished();
+	HRESULT Status( [in] int len, [in, size_is(len)] char *pMsg );
+};
+
+[ uuid (4AE2D3F3-C1FF-47db-B770-A53799CA68D0) ]
+coclass Scanner
+{
+	interface IScanner;
+};

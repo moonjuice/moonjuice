@@ -1,0 +1,10 @@
+Acromial height, left = 1387.8
+Acromial height, right = 1384.84
+Acromial-radiale length, left = 403.821
+Acromial-radiale length = 408.877
+B-B  breadth = 103.042
+chest height = 1215.61
+Bust girth length = 808.602, 1215.61
+UnderBust girth length = 745.372, 1149.61
+Waist girth length = 725.488, 1066.61
+Hip girth length = 943.81, 892.61

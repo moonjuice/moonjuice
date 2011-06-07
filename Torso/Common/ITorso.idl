@@ -1,0 +1,20 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+[ object, uuid (DF4D4652-65C9-46b3-96C1-60514BFEE751), pointer_default(unique) ]
+interface ITorso : IUnknown
+{
+	HRESULT Structurize( [in, out, string] char *pStr );
+};
+
+[ object, uuid (A22E5B17-B309-49ef-94D3-5B837AAA463B) ]
+interface ITorsoSink : IUnknown
+{
+	HRESULT NotifyReady( );
+};
+
+[ uuid( 9520299A-89AA-40f0-A7D0-096CC1BE1A87 ) ]
+coclass TorsoStructurer
+{
+	interface ITorso;
+};
