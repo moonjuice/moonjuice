@@ -292,6 +292,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\matrix_cal.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\include\Node.cpp"
 				>
 			</File>
@@ -301,6 +305,10 @@
 			</File>
 			<File
 				RelativePath=".\include\OpenGLView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Point.cpp"
 				>
 			</File>
 			<File
@@ -370,7 +378,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\matrix_cal.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\Nurbs.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Point.h"
 				>
 			</File>
 			<File
