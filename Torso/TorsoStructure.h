@@ -161,7 +161,7 @@ public:
 
 //	Features
 	int UpperNeckLine();
-	int newUpperNeckLine();
+	void newUpperNeckLine();
 	int CenterLine(void);
 	int ShoulderLine(void);
 

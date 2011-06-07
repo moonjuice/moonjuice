@@ -7679,7 +7679,11 @@ int CTorsoStructure::FillMesh( CPoint& Lower, CPoint& Upper, int Type, int Img )
 	return 0;
 }
 
-int CTorsoStructure::newUpperNeckLine()
+//TODO : newUpperNeckLine µù¸Ñ©|¥¼¼g
+/**@brief 
+ *
+ */
+void CTorsoStructure::newUpperNeckLine()
 {
 	CImage srcImg,destImg;
 	int sobelMask[11] = {-1,-1,-1,-1,-1,0,1,1,1,1,1};
