@@ -919,7 +919,9 @@ void CTorsoDoc::OnFileTorso()//人身結構化
 	m_Torso.BuildImage();
 	m_Torso.CenterLine();
 
-	m_Torso.UpperNeckLine();
+	//m_Torso.UpperNeckLine();
+
+	m_Torso.newUpperNeckLine();
 
 	m_Torso.LowerNeckL();
 	m_Torso.BustPoint();
