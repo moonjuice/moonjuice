@@ -7677,6 +7677,11 @@ int CTorsoStructure::FillMesh( CPoint& Lower, CPoint& Upper, int Type, int Img )
 	return 0;
 }
 
+int CTorsoStructure::newUpperNeckLine()
+{
+
+}
+
 int Iteration2( vector<vector<CVector> >& Mesh, vector<vector<bool> >& Fix )
 {
 vector<vector<CVector> > tmp;
