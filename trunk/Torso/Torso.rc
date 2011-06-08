@@ -206,6 +206,7 @@ BEGIN
         MENUITEM "&Torso",                      ID_FILE_TORSO
         MENUITEM "&Leg",                        ID_FILE_LEG
         MENUITEM "&Arm",                        ID_FILE_ARM
+        MENUITEM "neckGirthTest",               ID_FILE_NECKGIRTHTEST
         MENUITEM SEPARATOR
         MENUITEM "Set Dir",                     ID_FILE_SETDIR
         MENUITEM SEPARATOR

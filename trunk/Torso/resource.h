@@ -52,13 +52,14 @@
 #define ID_FILE_SETDIR                  32800
 #define ID_FILE_LOADTORSOSTR            32801
 #define ID_FILE_LOADARMSTR              32802
+#define ID_FILE_NECKGIRTHTEST           32803
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        131
-#define _APS_NEXT_COMMAND_VALUE         32803
+#define _APS_NEXT_COMMAND_VALUE         32804
 #define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
