@@ -33,6 +33,7 @@ BEGIN_MESSAGE_MAP(CTorsoDoc, CDocument)
 	ON_COMMAND(ID_FILE_ARM, &CTorsoDoc::OnFileArm)
 	ON_COMMAND(ID_FILE_LEG, &CTorsoDoc::OnFileLeg)
 	ON_COMMAND(ID_FILE_SETDIR, &CTorsoDoc::OnFileSetdir)
+	ON_COMMAND(ID_FILE_NECKGIRTHTEST, &CTorsoDoc::onNeckGirthTest)
 END_MESSAGE_MAP()
 
 // CTorsoDoc construction/destruction
@@ -1093,4 +1094,9 @@ void CTorsoDoc::OnFileSetdir()
 		AfxMessageBox(_T("The current path is"+  FolderPath));
 
 	}
+}
+
+void CTorsoDoc::onNeckGirthTest()
+{
+	m_Torso.newUpperNeckLine();
 }
