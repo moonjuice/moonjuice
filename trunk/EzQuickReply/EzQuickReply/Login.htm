@@ -1,0 +1,30 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<body>
+    <form method="post" name="login" id="loginform" action="http://www.eyny.com/logging.php?action=login&amp;loginsubmit=yes">
+    <input type="hidden" name="formhash" value="5027383b" />
+    <input type="hidden" name="referer" value="index.php" />
+    <div>
+        <div id="account">
+            <select name="loginfield" style="float: left; width: 50px;" id="loginfield">
+                <option value="username">用戶名</option>
+                <option value="uid">UID</option>
+            </select><input type="text" name="username" autocomplete="off" size="36" class="txt"
+                tabindex="1" value="" /></div>
+        <p>
+            <label for="password3">
+                密 碼 ：</label><input type="password" id="password3" name="password" onfocus="clearpwd()"
+                    onkeypress="detectCapsLock(event, this)" size="36" class="txt" tabindex="1" /></p>
+        <div id="seccodelayer">
+        </div>
+    </div>
+    <p class="fsubmit s_clear">
+        <button class="submit" type="submit" name="loginsubmit" value="true" tabindex="1">
+            登錄</button>
+        <input type="checkbox" class="checkbox" name="cookietime" id="cookietime" tabindex="1"
+            value="2592000" checked="checked" />
+        <label for="cookietime">
+            記住我的登錄狀態</label></p>
+    </form>
+</body>
+</html>
