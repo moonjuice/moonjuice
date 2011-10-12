@@ -18,7 +18,8 @@ namespace EzQuickReply
 
         private void login_Click(object sender, EventArgs e)
         {
-
+            //show login form 
+            //refresh status
         }
 
         private void add_Click(object sender, EventArgs e)
