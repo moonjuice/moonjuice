@@ -52,9 +52,9 @@ namespace EzQuickReply
             HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
             
             //吹水聊天室
-            myRequest = (HttpWebRequest)WebRequest.Create("http://www.eyny.com/forum-27-1.html");
-            myRequest.CookieContainer = cookieContainer;
-            myResponse = (HttpWebResponse)myRequest.GetResponse();
+            //myRequest = (HttpWebRequest)WebRequest.Create("http://www.eyny.com/forum-27-1.html");
+            //myRequest.CookieContainer = cookieContainer;
+            //myResponse = (HttpWebResponse)myRequest.GetResponse();
             StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.Default);
             string content = reader.ReadToEnd();
             //用<th class="subject new">找出標題與網址
