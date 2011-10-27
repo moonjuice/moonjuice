@@ -1,0 +1,3 @@
+C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\obj\Debug\Interop.Microsoft.Office.Core.dll
+C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\obj\Debug\Interop.Microsoft.Office.Interop.Excel.dll
+C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\obj\Debug\RandomSeat.csproj.ResolveComReference.cache
