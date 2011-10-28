@@ -1,3 +1,13 @@
 C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\obj\Debug\Interop.Microsoft.Office.Core.dll
 C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\obj\Debug\Interop.Microsoft.Office.Interop.Excel.dll
 C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\obj\Debug\RandomSeat.csproj.ResolveComReference.cache
+C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\obj\Debug\RandomSeat.Form1.resources
+C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\obj\Debug\RandomSeat.Properties.Resources.resources
+C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\obj\Debug\RandomSeat.csproj.GenerateResource.Cache
+C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\bin\Debug\Random.exe
+C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\bin\Debug\Random.pdb
+C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\bin\Debug\Interop.Microsoft.Office.Core.dll
+C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\bin\Debug\Interop.Microsoft.Office.Interop.Excel.dll
+C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\obj\Debug\Random.exe
+C:\Documents and Settings\moonjuice\桌面\RandomSeat\RandomSeat\obj\Debug\Random.pdb
