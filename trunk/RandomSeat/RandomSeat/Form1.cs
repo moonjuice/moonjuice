@@ -76,7 +76,10 @@ namespace RandomSeat
                     sheet.CreateRow(i).CreateCell(j).SetCellValue(s.ID + "\n" + s.Name);
                 j++;
                 if (j % col == 0)
+                {
                     i++;
+                    j++;
+                }
             }
             //存檔
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
