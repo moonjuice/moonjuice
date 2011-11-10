@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using Microsoft.Office.Interop.Excel;
 using System.Reflection;
 using NPOI.HSSF.UserModel;
 
@@ -17,9 +16,12 @@ namespace RandomSeat
     {
         List<Student> students;
         List<Student> seats;
+        int col;
         public Form1()
         {
             InitializeComponent();
+            students = new List<Student>();
+            seats = new List<Student>();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -37,7 +39,9 @@ namespace RandomSeat
                         while ((line = sr.ReadLine()) != null)
                         {
                             Student s = new Student();
-                            if (line.Contains(","))
+                            if (line.Contains("//"))
+                                continue;
+                            else if (line.Contains(","))
                             {
                                 string[] temp = line.Split(',');
                                 s.ID = temp[0];
@@ -55,7 +59,9 @@ namespace RandomSeat
 
         private void button2_Click(object sender, EventArgs e)
         {
-            int col = 10;
+            if (students.Count == 0 && seats.Count != 0)
+                students = new List<Student>(seats);
+            seats.Clear();
             //隨機亂排
             while (students.Count > 0)
             {
@@ -73,29 +79,31 @@ namespace RandomSeat
                 if (s.ID.Equals(""))
                     sheet.CreateRow(i).CreateCell(j).SetCellValue(s.Name);
                 else
-                    sheet.CreateRow(i).CreateCell(j).SetCellValue(s.ID + "\n" + s.Name);
+                    sheet.CreateRow(i).CreateCell(j).SetCellValue(s.ID + "-" + s.Name);
                 j++;
                 if (j % col == 0)
                 {
                     i++;
-                    j++;
+                    j=0;
                 }
             }
             //存檔
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
             saveFileDialog1.Filter = "Excel|*.xls";
-
+            saveFileDialog1.FileName = "座位表";
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 FileStream file;
-                if (saveFileDialog1.FileName.Equals(""))
-                    file = new FileStream("座位表.xls", FileMode.Create);
-                else
-                    file = new FileStream(saveFileDialog1.FileName, FileMode.Create);
+                file = new FileStream(saveFileDialog1.FileName, FileMode.Create);
                 hssfworkbook.Write(file);
                 file.Close();
             }
 
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            col = int.Parse(textBox1.Text.ToString());
         }
     }
 }
