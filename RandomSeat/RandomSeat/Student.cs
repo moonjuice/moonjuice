@@ -21,5 +21,11 @@ namespace RandomSeat
             get { return m_ID; }
             set { m_ID = value; }
         }
+
+        public Student()
+        {
+            ID = "";
+            Name = "";
+        }
     }
 }
