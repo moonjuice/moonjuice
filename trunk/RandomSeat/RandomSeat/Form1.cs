@@ -74,17 +74,28 @@ namespace RandomSeat
             HSSFWorkbook hssfworkbook = new HSSFWorkbook();
             HSSFSheet sheet = (HSSFSheet)hssfworkbook.CreateSheet("座位表");
             int i = 0, j = 0;
+            sheet.CreateRow(i);
             foreach (Student s in seats)
             {
                 if (s.ID.Equals(""))
-                    sheet.CreateRow(i).CreateCell(j).SetCellValue(s.Name);
+                    sheet.GetRow(i).CreateCell(j).SetCellValue(s.Name);
                 else
-                    sheet.CreateRow(i).CreateCell(j).SetCellValue(s.ID + "-" + s.Name);
+                {
+                    sheet.GetRow(i).CreateCell(j).SetCellValue(s.ID + "\n" + s.Name);
+
+                    HSSFCellStyle cs = (HSSFCellStyle)hssfworkbook.CreateCellStyle();
+                    cs.WrapText = true;
+                    sheet.GetRow(i).GetCell(j).CellStyle = cs;
+
+                    //因為換行所以預設幫他Row的高度變成兩倍
+                    sheet.GetRow(i).HeightInPoints = 2 * sheet.DefaultRowHeight / 20;
+                }
                 j++;
                 if (j % col == 0)
                 {
                     i++;
-                    j=0;
+                    sheet.CreateRow(i);
+                    j = 0;
                 }
             }
             //存檔
