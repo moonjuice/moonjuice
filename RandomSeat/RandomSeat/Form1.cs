@@ -73,7 +73,16 @@ namespace RandomSeat
             //建立Excel
             HSSFWorkbook hssfworkbook = new HSSFWorkbook();
             HSSFSheet sheet = (HSSFSheet)hssfworkbook.CreateSheet("座位表");
-            int i = 0, j = 0;
+            sheet.CreateRow(0).CreateCell(0).SetCellValue("黑板");            
+            sheet.CreateRow(1).CreateCell(0).SetCellValue("講台");
+
+            //合併單元格(第一行第一列到第一行第col列)
+            sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(0, (short)0, 0, (short)col-1));
+            sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(1, (short)1, 0, (short)col-1));
+            sheet.GetRow(0).GetCell(0).CellStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;//文字置中
+            sheet.GetRow(1).GetCell(0).CellStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;//文字置中
+
+            int i = 2, j = 0;
             sheet.CreateRow(i);
             foreach (Student s in seats)
             {
