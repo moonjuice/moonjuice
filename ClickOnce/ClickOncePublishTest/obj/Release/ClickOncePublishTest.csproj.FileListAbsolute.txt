@@ -1,0 +1,7 @@
+C:\Documents and Settings\moonjuice\桌面\ClickOncePublishTest\ClickOncePublishTest\bin\Release\ClickOncePublishTest.exe
+C:\Documents and Settings\moonjuice\桌面\ClickOncePublishTest\ClickOncePublishTest\bin\Release\ClickOncePublishTest.pdb
+C:\Documents and Settings\moonjuice\桌面\ClickOncePublishTest\ClickOncePublishTest\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\moonjuice\桌面\ClickOncePublishTest\ClickOncePublishTest\obj\Release\ClickOncePublishTest.Properties.Resources.resources
+C:\Documents and Settings\moonjuice\桌面\ClickOncePublishTest\ClickOncePublishTest\obj\Release\ClickOncePublishTest.csproj.GenerateResource.Cache
+C:\Documents and Settings\moonjuice\桌面\ClickOncePublishTest\ClickOncePublishTest\obj\Release\ClickOncePublishTest.exe
+C:\Documents and Settings\moonjuice\桌面\ClickOncePublishTest\ClickOncePublishTest\obj\Release\ClickOncePublishTest.pdb
